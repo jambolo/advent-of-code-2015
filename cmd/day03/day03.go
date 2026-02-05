@@ -7,6 +7,7 @@ import (
 	load "github.com/jambolo/advent-of-code-2015/internal/common"
 )
 
+// move updates x and y based on the direction character and returns the new coordinates
 func move(x, y int, char rune) (int, int) {
 	switch char {
 	case '^':
@@ -22,7 +23,6 @@ func move(x, y int, char rune) (int, int) {
 }
 
 func main() {
-	// move updates x and y based on the direction character and returns the new coordinates
 	filePath := flag.String("file", "data/day03/day03-input.txt", "path to the data file")
 	part := flag.Int("part", 1, "which part of the challenge (1 or 2)")
 

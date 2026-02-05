@@ -32,3 +32,12 @@ Trivial.
 |------|--------|
 |    1 |   2565 |
 |    2 |   2639 |
+
+## Day 4
+
+Trivial. Go has a simple MD5 library.
+
+| Part |  Answer |
+|------|---------|
+|    1 |  346386 |
+|    2 | 9958218 |
