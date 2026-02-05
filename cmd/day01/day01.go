@@ -24,7 +24,7 @@ func main() {
 	fmt.Printf("=== Day 1 - Part %d ===\n", *part)
 
 	// Load the data from the specified file. Abort on error.
-	lines, err := load.ReadLines(*filePath)
+	input, err := load.ReadAll(*filePath)
 	if err != nil {
 		fmt.Printf("Error reading file: %v\n", err)
 		return
@@ -32,39 +32,33 @@ func main() {
 
 	// Part 1
 	if *part == 1 {
-		for _, line := range lines {
-			// Count the difference between '(' and ')' and print the result
-			floor := 0
-			for _, char := range line {
-				switch char {
-				case '(':
-					floor++
-				case ')':
-					floor--
-				}
+		// Count the difference between '(' and ')' and print the result
+		floor := 0
+		for _, char := range input {
+			switch char {
+			case '(':
+				floor++
+			case ')':
+				floor--
 			}
-			fmt.Printf("Final floor: %d\n", floor)
 		}
+		fmt.Printf("Final floor: %d\n", floor)
 	}
 
 	// Part 2
 	if *part == 2 {
-		for _, line := range lines {
-			floor := 0
-			// Find the position of the first character that causes the floor to go below 0
-			position := 1
-			for _, char := range line {
-				switch char {
-				case '(':
-					floor++
-				case ')':
-					floor--
-				}
-				if floor < 0 {
-					fmt.Printf("Position of first basement entry: %d\n", position)
-					break
-				}
-				position++
+		floor := 0
+		// Find the position of the first character that causes the floor to go below 0
+		for position, char := range input {
+			switch char {
+			case '(':
+				floor++
+			case ')':
+				floor--
+			}
+			if floor < 0 {
+				fmt.Printf("Position of first basement entry: %d\n", position+1)
+				break
 			}
 		}
 	}
