@@ -1,0 +1,28 @@
+# --- Binaries and Executables ---
+# These are the compiled files. We don't want them in Git.
+bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# --- Tools and Testing ---
+# Test coverage files
+*.out
+*.test
+*.prof
+
+# --- IDEs and Editors ---
+# VS Code specific files
+.vscode/*
+*.code-workspace
+
+# JetBrains (GoLand)
+.idea/
+
+# --- Environment Secrets ---
+.env
+
+# --- Claude ---
+.claude/
