@@ -14,3 +14,12 @@ Trivial.
 |    2 |   1797 |
 
 I am using Claude to help me write code and learn Go, but I have to be careful because it knows about Advent Of Code 2015 and it will write a complete solution if I let it.
+
+## Day 2
+
+Trivial.
+
+| Part | Answer  |
+|------|---------|
+|    1 | 1588178 |
+|    2 | 3783758 |

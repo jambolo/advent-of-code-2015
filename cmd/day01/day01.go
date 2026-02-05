@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	filePath := flag.String("file", "data/default.dat", "path to the unique data file")
+	filePath := flag.String("file", "data/day01/day01-input.txt", "path to the data file")
 	part := flag.Int("part", 1, "which part of the challenge (1 or 2)")
 
 	// 2. Parse the flags
