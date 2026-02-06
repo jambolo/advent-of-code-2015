@@ -1,11 +1,14 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"log"
 
-	load "github.com/jambolo/advent-of-code-2015/internal/common"
+	load "github.com/jambolo/advent-of-code-2015/internal/load"
+	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
 )
+
+type point struct{ x, y int }
 
 // move updates x and y based on the direction character and returns the new coordinates
 func move(x, y int, char rune) (int, int) {
@@ -23,57 +26,47 @@ func move(x, y int, char rune) (int, int) {
 }
 
 func main() {
-	filePath := flag.String("file", "data/day03/day03-input.txt", "path to the data file")
-	part := flag.Int("part", 1, "which part of the challenge (1 or 2)")
+	day := 3
 
-	// 2. Parse the flags
-	flag.Parse()
-
-	// Validate part
-	if *part != 1 && *part != 2 {
-		fmt.Println("Invalid part specified. Must be 1 or 2.")
-		return
-	}
+	// Grab the command line parameters (file path and part number)
+	filePath, part := setup.Parameters(day)
 
 	// Print a banner showing the current day and if it is part 1 or part 2
-	fmt.Printf("=== Day 3 - Part %d ===\n", *part)
+	setup.Banner(day, part)
 
 	// Load the data from the specified file. Abort on error.
-	input, err := load.ReadAll(*filePath)
+	input, err := load.ReadAll(filePath)
 	if err != nil {
-		fmt.Printf("Error reading file: %v\n", err)
-		return
+		log.Fatal(err)
 	}
 
 	// Part 1
-	if *part == 1 {
+	if part == 1 {
 		x := 0
 		y := 0
-		visited := make(map[string]bool)
-		visited["0,0"] = true
+		visited := map[point]bool{{0, 0}: true}
 
 		for _, char := range input {
 			x, y = move(x, y, char)
-			visited[fmt.Sprintf("%d,%d", x, y)] = true
+			visited[point{x, y}] = true
 		}
 		fmt.Printf("Houses visited: %d\n", len(visited))
 	}
 
-	if *part == 2 {
-		santa_x := 0
-		santa_y := 0
-		robo_x := 0
-		robo_y := 0
-		visited := make(map[string]bool)
-		visited["0,0"] = true
+	if part == 2 {
+		santaX := 0
+		santaY := 0
+		roboX := 0
+		roboY := 0
+		visited := map[point]bool{{0, 0}: true}
 
 		for i, char := range input {
 			if i%2 == 0 {
-				santa_x, santa_y = move(santa_x, santa_y, char)
-				visited[fmt.Sprintf("%d,%d", santa_x, santa_y)] = true
+				santaX, santaY = move(santaX, santaY, char)
+				visited[point{santaX, santaY}] = true
 			} else {
-				robo_x, robo_y = move(robo_x, robo_y, char)
-				visited[fmt.Sprintf("%d,%d", robo_x, robo_y)] = true
+				roboX, roboY = move(roboX, roboY, char)
+				visited[point{roboX, roboY}] = true
 			}
 		}
 		fmt.Printf("Houses visited: %d\n", len(visited))

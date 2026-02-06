@@ -2,29 +2,24 @@ package main
 
 import (
 	"crypto/md5"
-	"flag"
 	"fmt"
+
+	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
 )
 
 func main() {
-	part := flag.Int("part", 1, "which part of the challenge (1 or 2)")
+	day := 4
 
-	// 2. Parse the flags
-	flag.Parse()
-
-	// Validate part
-	if *part != 1 && *part != 2 {
-		fmt.Println("Invalid part specified. Must be 1 or 2.")
-		return
-	}
+	// Grab the command line parameters (file path and part number)
+	_, part := setup.Parameters(day)
 
 	// Print a banner showing the current day and if it is part 1 or part 2
-	fmt.Printf("=== Day 4 - Part %d ===\n", *part)
+	setup.Banner(day, part)
 
 	prefix := "iwrupvqb"
 
 	// Part 1
-	if *part == 1 {
+	if part == 1 {
 		for i := 0; ; i++ {
 			input := fmt.Sprintf("%s%d", prefix, i)
 			hash := md5.Sum([]byte(input))
@@ -36,7 +31,7 @@ func main() {
 		}
 	}
 	// Part 2
-	if *part == 2 {
+	if part == 2 {
 		for i := 0; ; i++ {
 			input := fmt.Sprintf("%s%d", prefix, i)
 			hash := md5.Sum([]byte(input))

@@ -41,3 +41,12 @@ Trivial. Go has a simple MD5 library.
 |------|---------|
 |    1 |  346386 |
 |    2 | 9958218 |
+
+## Day 5
+
+Trivial. I wanted to use regex, but it turned out to be a lot easier to do the checking manually. I'm letting Claude to most of the work here, because the solutions are trivial, so I'm being lazy.
+
+| Part | Answer |
+|------|--------|
+|    1 |    238 |
+|    2 |     69 |

@@ -1,37 +1,30 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"log"
 
-	load "github.com/jambolo/advent-of-code-2015/internal/common"
+	load "github.com/jambolo/advent-of-code-2015/internal/load"
+	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
 )
 
 func main() {
-	filePath := flag.String("file", "data/day01/day01-input.txt", "path to the data file")
-	part := flag.Int("part", 1, "which part of the challenge (1 or 2)")
+	day := 1
 
-	// 2. Parse the flags
-	flag.Parse()
-
-	// Validate part
-	if *part != 1 && *part != 2 {
-		fmt.Println("Invalid part specified. Must be 1 or 2.")
-		return
-	}
+	// Grab the command line parameters (file path and part number)
+	filePath, part := setup.Parameters(day)
 
 	// Print a banner showing the current day and if it is part 1 or part 2
-	fmt.Printf("=== Day 1 - Part %d ===\n", *part)
+	setup.Banner(day, part)
 
 	// Load the data from the specified file. Abort on error.
-	input, err := load.ReadAll(*filePath)
+	input, err := load.ReadAll(filePath)
 	if err != nil {
-		fmt.Printf("Error reading file: %v\n", err)
-		return
+		log.Fatal(err)
 	}
 
 	// Part 1
-	if *part == 1 {
+	if part == 1 {
 		// Count the difference between '(' and ')' and print the result
 		floor := 0
 		for _, char := range input {
@@ -46,7 +39,7 @@ func main() {
 	}
 
 	// Part 2
-	if *part == 2 {
+	if part == 2 {
 		floor := 0
 		// Find the position of the first character that causes the floor to go below 0
 		for position, char := range input {

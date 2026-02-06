@@ -4,13 +4,16 @@ APPS := $(shell ls cmd)
 # The directory where binaries will be placed
 BIN_DIR := bin
 
-.PHONY: all build clean help
+# Common source files that all apps depend on
+COMMON_SRC := $(wildcard internal/common/*.go)
 
-# Default target: build everything
-all: build
+.PHONY: all build build-all clean help
 
-## build: Compiles all apps into the /bin directory
-build: clean
+# Default target: build only changed apps
+build: bin/day01 bin/day02 bin/day03 bin/day04 bin/day05
+
+## build-all: Compiles all apps into the /bin directory (forces rebuild)
+build-all: clean
 	@mkdir -p $(BIN_DIR)
 	@echo "Building all apps..."
 	@for app in $(APPS) ; do \
@@ -30,3 +33,7 @@ help:
 	@echo ""
 	@echo "Targets:"
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
+
+# Pattern rule: build bin/dayNN from cmd/dayNN/
+bin/%: cmd/%/*.go $(COMMON_SRC)
+	go build -o $@ ./cmd/$*
