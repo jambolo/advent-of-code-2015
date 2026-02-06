@@ -77,3 +77,12 @@ Trivial.
 |------|--------|
 |    1 |   1517 |
 |    2 |   2117 |
+
+## Day 9
+
+So disappointing... I was expecting some kind of combinatorial explosion with this traveling salesman problem, so I spent time preparing for the inevitable optimizations that would have to be implemented. Part 2 let me down. None of that was necessary, so I removed it.
+
+| Part | Answer |
+|------|--------|
+|    1 |    141 |
+|    2 |    736 |
