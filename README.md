@@ -59,3 +59,12 @@ Trivial. Go is starting to look to me like just a better version of C. I haven't
 |------|----------|
 |    1 |   543903 |
 |    2 | 14687245 |
+
+## Day 7
+
+Fun -- some recursion, some regexes, some caching. Not too hard to figure out.
+
+| Part | Answer |
+|------|--------|
+|    1 |  46065 |
+|    2 |  14134 |
