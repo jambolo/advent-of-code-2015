@@ -34,3 +34,12 @@ bin/                     # Compiled binaries (gitignored)
 - Solutions use `flag` for CLI args, print a banner (`=== Day X - Part Y ===`), then output results.
 - Import shared file reader as `load "github.com/jambolo/advent-of-code-2015/internal/common"`, call `load.ReadLines(path)`.
 - The Makefile auto-discovers days by scanning `cmd/`.
+
+## Setting Up a New Day
+
+When asked to "set up a new day" (day NN):
+
+1. Create `cmd/dayNN/dayNN.go` with only the skeleton: parse flags, print banner, read input via `load.ReadLines`. It may be incomplete and not compile.
+2. Create an empty `data/dayNN/dayNN-input.txt`.
+3. Add `bin/dayNN` as a dependency of the `build` target in the Makefile.
+4. Add a `## Day NN` heading at the end of `README.md`.

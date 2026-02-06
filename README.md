@@ -68,3 +68,12 @@ Fun -- some recursion, some regexes, some caching. Not too hard to figure out.
 |------|--------|
 |    1 |  46065 |
 |    2 |  14134 |
+
+## Day 8
+
+Trivial.
+
+| Part | Answer |
+|------|--------|
+|    1 |   1517 |
+|    2 |   2117 |
