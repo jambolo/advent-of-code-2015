@@ -104,3 +104,12 @@ Trivial. Not much opportunity to be clever.
 |------|----------|
 |    1 | cqjxxyzz |
 |    2 | cqkaabcc |
+
+## Day 12
+
+Go's JSON library made it simple.
+
+| Part | Answer |
+|------|--------|
+|    1 | 191164 |
+|    2 |  87842 |

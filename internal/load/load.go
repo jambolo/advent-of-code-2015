@@ -1,6 +1,7 @@
 package load
 
 import (
+	"encoding/json"
 	"os"
 	"strings"
 )
@@ -21,4 +22,13 @@ func ReadAll(path string) (string, error) {
 		return "", err
 	}
 	return strings.TrimRight(string(data), "\n"), nil
+}
+
+// Json reads the content of the provided file path and unmarshals it into the provided variable.
+func Json(path string, v any) error {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, v)
 }
