@@ -19,7 +19,7 @@ I am using Claude to help me write code and learn Go, but I have to be careful b
 
 Trivial.
 
-| Part | Answer  |
+| Part |  Answer |
 |------|---------|
 |    1 | 1588178 |
 |    2 | 3783758 |
@@ -86,3 +86,14 @@ So disappointing... I was expecting some kind of combinatorial explosion with th
 |------|--------|
 |    1 |    141 |
 |    2 |    736 |
+
+## Day 10
+
+Well, part 1 is pretty easy. I was lazy and just used the same code for part 2 and waited a long time for the result. I thought about caching substrings, but that seemed complicated and would probably take longer to implement than just waiting for the brute force result. Maybe I'll try again later
+
+| Part |  Answer |
+|------|---------|
+|    1 |  329356 |
+|    2 | 4666278 |
+
+
