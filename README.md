@@ -50,3 +50,12 @@ Trivial. I wanted to use regex, but it turned out to be a lot easier to do the c
 |------|--------|
 |    1 |    238 |
 |    2 |     69 |
+
+## Day 6
+
+Trivial. Go is starting to look to me like just a better version of C. I haven't seen any really interesting syntax or capabilities. In fact, it feels anemic compared to other modern languages.
+
+| Part |  Answer  |
+|------|----------|
+|    1 |   543903 |
+|    2 | 14687245 |

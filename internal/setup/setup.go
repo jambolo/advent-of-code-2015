@@ -10,7 +10,7 @@ import (
 func Parameters(day int) (path string, part int) {
 	defaultPath := fmt.Sprintf("data/day%02d/day%02d-input.txt", day, day)
 	pathFlag := flag.String("file", defaultPath, "Path to the input file")
-	partFlag := flag.Int("part", 0, "Part number (1 or 2)")
+	partFlag := flag.Int("part", 1, "Part number (1 or 2)")
 	flag.Parse()
 
 	if *partFlag != 1 && *partFlag != 2 {
