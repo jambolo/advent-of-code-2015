@@ -40,44 +40,32 @@ func permutations(n int) [][]int {
 	return result
 }
 
-func appendCity(cities []string, city string) []string {
-	for _, v := range cities {
-		if v == city {
-			return cities
-		}
-	}
-	return append(cities, city)
-}
-
 func main() {
 	day := 9
 
-	// Grab the command line parameters (file path and part number)
 	filePath, part := setup.Parameters(day)
-
-	// Print a banner showing the current day and if it is part 1 or part 2
 	setup.Banner(day, part)
 
-	// Load the data from the specified file. Abort on error.
 	lines, err := load.ReadLines(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// Create a map of distances and a list of city names.
+	// Parse distances and collect unique city names.
 	distances := make(map[[2]string]int)
-	var cities []string
+	citySet := make(map[string]bool)
 	for _, line := range lines {
 		var city1, city2 string
 		var distance int
-		_, err := fmt.Sscanf(line, "%s to %s = %d", &city1, &city2, &distance)
-		if err != nil {
-			log.Fatal(err)
-		}
+		fmt.Sscanf(line, "%s to %s = %d", &city1, &city2, &distance)
 		distances[[2]string{city1, city2}] = distance
 		distances[[2]string{city2, city1}] = distance
-		cities = appendCity(cities, city1)
-		cities = appendCity(cities, city2)
+		citySet[city1] = true
+		citySet[city2] = true
+	}
+	var cities []string
+	for city := range citySet {
+		cities = append(cities, city)
 	}
 
 	allRoutes := permutations(len(cities))

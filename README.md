@@ -89,11 +89,18 @@ So disappointing... I was expecting some kind of combinatorial explosion with th
 
 ## Day 10
 
-Well, part 1 is pretty easy. I was lazy and just used the same code for part 2 and waited a long time for the result. I thought about caching substrings, but that seemed complicated and would probably take longer to implement than just waiting for the brute force result. Maybe I'll try again later
+Well, part 1 is pretty easy. I was lazy and just used the same code for part 2 and waited a long time for the result. I thought about caching substrings, but that seemed complicated and would probably take longer to implement than just waiting for the brute force result. After refactoring, the results were much faster. It turns out that the slowness was caused by reallocating the entire string after each character was appended.
 
 | Part |  Answer |
 |------|---------|
 |    1 |  329356 |
 |    2 | 4666278 |
 
+## Day 11
 
+Trivial. Not much opportunity to be clever.
+
+| Part |  Answer  |
+|------|----------|
+|    1 | cqjxxyzz |
+|    2 | cqkaabcc |

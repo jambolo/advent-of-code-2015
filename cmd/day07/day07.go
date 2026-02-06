@@ -38,25 +38,20 @@ type gate struct {
 	rValue uint16
 }
 
+// parseOperand returns the wire name and literal value for an operand string.
+func parseOperand(s string) (string, uint16) {
+	if s == "" {
+		return "", 0
+	}
+	if v, err := strconv.ParseUint(s, 10, 16); err == nil {
+		return "", uint16(v)
+	}
+	return s, 0
+}
+
 func parseGate(op op, left, right string) gate {
-	var lValue uint16
-	var lWire string // default to empty string if left is not a wire
-	if left == "" {
-		lValue = 0 // ignored
-	} else if v, err := strconv.ParseUint(left, 10, 16); err == nil {
-		lValue = uint16(v)
-	} else {
-		lWire = left
-	}
-	var rValue uint16
-	var rWire string // default to empty string if right is not a wire
-	if right == "" {
-		rValue = 0 // ignored
-	} else if v, err := strconv.ParseUint(right, 10, 16); err == nil {
-		rValue = uint16(v)
-	} else {
-		rWire = right
-	}
+	lWire, lValue := parseOperand(left)
+	rWire, rValue := parseOperand(right)
 	return gate{op: op, lWire: lWire, rWire: rWire, lValue: lValue, rValue: rValue}
 }
 
@@ -90,18 +85,14 @@ func evaluate(gates map[string]gate, cache map[string]uint16, wire string) uint1
 	if !ok {
 		log.Fatalf("undefined wire: %s", wire)
 	}
-	var lValue uint16
-	if gate.lWire != "" {
-		lValue = evaluate(gates, cache, gate.lWire)
-	} else {
-		lValue = gate.lValue
+	resolve := func(wire string, literal uint16) uint16 {
+		if wire != "" {
+			return evaluate(gates, cache, wire)
+		}
+		return literal
 	}
-	var rValue uint16
-	if gate.rWire != "" {
-		rValue = evaluate(gates, cache, gate.rWire)
-	} else {
-		rValue = gate.rValue
-	}
+	lValue := resolve(gate.lWire, gate.lValue)
+	rValue := resolve(gate.rWire, gate.rValue)
 
 	var value uint16
 	switch gate.op {
@@ -143,7 +134,7 @@ func main() {
 	circuit := buildCircuit(lines)
 
 	// evaluate the circuit
-	var cache = make(map[string]uint16)
+	cache := make(map[string]uint16)
 	value := evaluate(circuit, cache, "a")
 
 	// Part 1
@@ -155,7 +146,7 @@ func main() {
 
 	// Part 2
 	if part == 2 {
-		var cache2 = make(map[string]uint16)
+		cache2 := make(map[string]uint16)
 		cache2["b"] = value
 		value2 := evaluate(circuit, cache2, "a")
 		fmt.Printf("Value of wire a with b overridden: %d\n", value2)

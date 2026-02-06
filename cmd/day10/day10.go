@@ -2,29 +2,25 @@ package main
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 
 	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
 )
 
 func lookAndSay(input string) string {
-	var result string
-	last := rune(input[0])
-	count := 1
-	i := 1
-	for i < len(input) {
-		next := rune(input[i])
-		if next != last {
-			countStr := fmt.Sprintf("%d", count)
-			result += countStr + string(last)
-			last = next
-			count = 0
+	var b strings.Builder
+	for i := 0; i < len(input); {
+		ch := input[i]
+		count := 1
+		for i+count < len(input) && input[i+count] == ch {
+			count++
 		}
-		count++
-		i++
+		b.WriteString(strconv.Itoa(count))
+		b.WriteByte(ch)
+		i += count
 	}
-	countStr := fmt.Sprintf("%d", count)
-	result += countStr + string(last)
-	return result
+	return b.String()
 }
 
 func main() {
