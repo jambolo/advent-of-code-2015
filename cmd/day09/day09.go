@@ -5,10 +5,12 @@ import (
 	"log"
 	"math"
 
-	load "github.com/jambolo/advent-of-code-2015/internal/load"
-	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
-	utils "github.com/jambolo/advent-of-code-2015/internal/utils"
+	"github.com/jambolo/advent-of-code-2015/internal/load"
+	"github.com/jambolo/advent-of-code-2015/internal/setup"
+	"github.com/jambolo/advent-of-code-2015/internal/utils"
 )
+
+type stringSet map[string]struct{}
 
 func main() {
 	day := 9
@@ -23,15 +25,15 @@ func main() {
 
 	// Parse distances and collect unique city names.
 	distances := make(map[[2]string]int)
-	citySet := make(map[string]bool)
+	citySet := make(stringSet)
 	for _, line := range lines {
 		var city1, city2 string
 		var distance int
 		fmt.Sscanf(line, "%s to %s = %d", &city1, &city2, &distance)
 		distances[[2]string{city1, city2}] = distance
 		distances[[2]string{city2, city1}] = distance
-		citySet[city1] = true
-		citySet[city2] = true
+		citySet[city1] = struct{}{}
+		citySet[city2] = struct{}{}
 	}
 	var cities []string
 	for city := range citySet {
@@ -43,7 +45,7 @@ func main() {
 	maxDistance := 0
 	for _, route := range allRoutes {
 		var totalDistance int
-		for i := range len(route)-1 {
+		for i := range route[:len(route)-1] {
 			city0 := cities[route[i]]
 			city1 := cities[route[i+1]]
 			totalDistance += distances[[2]string{city0, city1}]

@@ -5,9 +5,9 @@ import (
 	"log"
 	"strings"
 
-	load "github.com/jambolo/advent-of-code-2015/internal/load"
-	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
-	utils "github.com/jambolo/advent-of-code-2015/internal/utils"
+	"github.com/jambolo/advent-of-code-2015/internal/load"
+	"github.com/jambolo/advent-of-code-2015/internal/setup"
+	"github.com/jambolo/advent-of-code-2015/internal/utils"
 )
 
 const size = 1000
@@ -49,7 +49,10 @@ func parseInstructions(lines []string) []instruction {
 			log.Fatalf("Invalid instruction: %s", line)
 		}
 		var x1, y1, x2, y2 int
-		fmt.Sscanf(line, "%d,%d through %d,%d", &x1, &y1, &x2, &y2)
+		_, err := fmt.Sscanf(line, "%d,%d through %d,%d", &x1, &y1, &x2, &y2)
+		if err != nil {
+			log.Fatal(err)
+		}
 		instr.extents = rect{x1, y1, x2, y2}
 		instructions = append(instructions, instr)
 	}
@@ -96,8 +99,8 @@ func main() {
 
 		// Count the number of lights that are on
 		count := 0
-		for i := range grid {
-			if grid[i] {
+		for _, on := range grid {
+			if on {
 				count++
 			}
 		}

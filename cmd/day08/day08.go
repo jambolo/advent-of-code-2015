@@ -5,8 +5,8 @@ import (
 	"log"
 	"strconv"
 
-	load "github.com/jambolo/advent-of-code-2015/internal/load"
-	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
+	"github.com/jambolo/advent-of-code-2015/internal/load"
+	"github.com/jambolo/advent-of-code-2015/internal/setup"
 )
 
 func processNext(line string, i int) (rune, int) {

@@ -4,7 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 
-	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
+	"github.com/jambolo/advent-of-code-2015/internal/setup"
 )
 
 func main() {

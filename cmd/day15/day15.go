@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	load "github.com/jambolo/advent-of-code-2015/internal/load"
-	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
-	utils "github.com/jambolo/advent-of-code-2015/internal/utils"
+	"github.com/jambolo/advent-of-code-2015/internal/load"
+	"github.com/jambolo/advent-of-code-2015/internal/setup"
+	"github.com/jambolo/advent-of-code-2015/internal/utils"
 )
 
 type ingredient struct {

@@ -3,16 +3,12 @@ package main
 import (
 	"fmt"
 
-	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
+	"github.com/jambolo/advent-of-code-2015/internal/setup"
 )
 
 // isFlying returns true if the reindeer is flying at the given time, false if it is resting.
 func isFlying(time int, flyTime int, cycleTime int) bool {
-	flyingTime := (time + cycleTime - 1) % cycleTime
-	if flyingTime < flyTime {
-		return true
-	}
-	return false
+	return (time-1)%cycleTime < flyTime
 }
 
 func main() {
@@ -76,12 +72,12 @@ func main() {
 				dancerPoints++
 			}
 
-			cf := isFlying(t, cometFlyTime, cometCycleTime)
-			df := isFlying(t, dancerFlyTime, dancerCycleTime)
-			fmt.Printf("%d: comet: %v %d %d, dancer: %v %d %d\n", t, cf, cometDistance, cometPoints, df, dancerDistance, dancerPoints)
+			// cf := isFlying(t, cometFlyTime, cometCycleTime)
+			// df := isFlying(t, dancerFlyTime, dancerCycleTime)
+			//			fmt.Printf("%d: comet: %v %d %d, dancer: %v %d %d\n", t, cf, cometDistance, cometPoints, df, dancerDistance, dancerPoints)
 		}
-		fmt.Printf("Comet points: %d\n", cometPoints)
-		fmt.Printf("Dancer points: %d\n", dancerPoints)
+		//		fmt.Printf("Comet points: %d\n", cometPoints)
+		//		fmt.Printf("Dancer points: %d\n", dancerPoints)
 		fmt.Printf("Winner points: %d\n", max(cometPoints, dancerPoints))
 	}
 }

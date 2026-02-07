@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
+	"github.com/jambolo/advent-of-code-2015/internal/setup"
 )
 
 func lookAndSay(input string) string {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
+	"github.com/jambolo/advent-of-code-2015/internal/setup"
 )
 
 // hasStraight returns true if the password includes an increasing straight of at least three letters.

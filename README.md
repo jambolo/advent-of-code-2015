@@ -135,3 +135,10 @@ Uh oh. Not getting the correct answer for part 2 and it looks correct to me.
 * *Not the correct answer*
 
 ## Day 15
+
+Trivial. Claude and Copilot have been very helpful pointing out ways to make my code more idiomatic.
+
+| Part |  Answer  |
+|------|----------|
+|    1 | 13882464 |
+|    2 | 11171160 |

@@ -5,8 +5,8 @@ import (
 	"log"
 	"strings"
 
-	load "github.com/jambolo/advent-of-code-2015/internal/load"
-	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
+	"github.com/jambolo/advent-of-code-2015/internal/load"
+	"github.com/jambolo/advent-of-code-2015/internal/setup"
 )
 
 // hasThreeVowels returns true if the string has at least three vowels (aeiou), false otherwise
@@ -36,7 +36,6 @@ func hasDoubleLetter(s string) bool {
 
 // hasNoBadWords returns true if the string does not contain any of the bad words (ab, cd, pq, xy), false otherwise
 func hasNoBadWords(s string) bool {
-	badWords := []string{"ab", "cd", "pq", "xy"}
 	for _, bad := range badWords {
 		if strings.Contains(s, bad) {
 			return false
@@ -47,10 +46,15 @@ func hasNoBadWords(s string) bool {
 
 // hasRepeatedPair returns true if the string contains a pair of any two letters that appears at least twice in the string without overlapping.
 func hasRepeatedPair(s string) bool {
-	for i := range len(s)-1 {
+	firstSeen := make(map[string]int)
+	for i := 0; i+1 < len(s); i++ {
 		pair := s[i : i+2]
-		if strings.Contains(s[i+2:], pair) {
-			return true
+		if first, ok := firstSeen[pair]; ok {
+			if first < i-1 {
+				return true
+			}
+		} else {
+			firstSeen[pair] = i
 		}
 	}
 	return false
@@ -58,13 +62,15 @@ func hasRepeatedPair(s string) bool {
 
 // hasSplitPair returns true if the string contains a pair of any two letters with a letter in between them.
 func hasSplitPair(s string) bool {
-	for i := range len(s)-2 {
+	for i := 0; i+2 < len(s); i++ {
 		if s[i] == s[i+2] {
 			return true
 		}
 	}
 	return false
 }
+
+var badWords = []string{"ab", "cd", "pq", "xy"}
 
 func main() {
 	day := 5
