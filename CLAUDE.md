@@ -32,7 +32,9 @@ bin/                     # Compiled binaries (gitignored)
 
 - Each day: create `cmd/dayXX/dayXX.go` and `data/dayXX/dayXX-input.txt`.
 - Solutions use `flag` for CLI args, print a banner (`=== Day X - Part Y ===`), then output results.
-- Import shared file reader as `load "github.com/jambolo/advent-of-code-2015/internal/common"`, call `load.ReadLines(path)`.
+- Import shared file reader as `load "github.com/jambolo/advent-of-code-2015/internal/load"`, call `load.ReadLines(path)`.
+- Import setup as `load "github.com/jambolo/advent-of-code-2015/internal/setup"`.
+- Import utils as `load "github.com/jambolo/advent-of-code-2015/internal/utils"`.
 - The Makefile auto-discovers days by scanning `cmd/`.
 
 ## Setting Up a New Day

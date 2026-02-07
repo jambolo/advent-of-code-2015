@@ -7,6 +7,7 @@ import (
 
 	load "github.com/jambolo/advent-of-code-2015/internal/load"
 	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
+	utils "github.com/jambolo/advent-of-code-2015/internal/utils"
 )
 
 const size = 1000
@@ -127,10 +128,7 @@ func main() {
 		}
 
 		// Count the number of lights that are on
-		brightness := 0
-		for i := range grid {
-			brightness += grid[i]
-		}
+		brightness := utils.Sum(grid)
 		fmt.Printf("Total brightness: %d\n", brightness)
 	}
 }

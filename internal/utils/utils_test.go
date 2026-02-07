@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"fmt"
+	"math"
 	"slices"
 	"testing"
 )
@@ -193,5 +195,277 @@ func TestPermutationsIndependence(t *testing.T) {
 	result[0][0] = originalVal
 	if result[0][0] != originalVal {
 		t.Errorf("Failed to restore result[0][0]")
+	}
+}
+
+// TestSumInt tests Sum with int slices
+func TestSumInt(t *testing.T) {
+	tests := []struct {
+		input    []int
+		expected int
+	}{
+		{[]int{}, 0},
+		{[]int{1}, 1},
+		{[]int{1, 2, 3}, 6},
+		{[]int{-1, 2, -3}, -2},
+		{[]int{0, 0, 0}, 0},
+		{[]int{100, 200, 300}, 600},
+	}
+
+	for _, test := range tests {
+		result := Sum(test.input)
+		if result != test.expected {
+			t.Errorf("Sum(%v) = %d, expected %d", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSumInt64 tests Sum with int64 slices
+func TestSumInt64(t *testing.T) {
+	tests := []struct {
+		input    []int64
+		expected int64
+	}{
+		{[]int64{}, 0},
+		{[]int64{1}, 1},
+		{[]int64{1, 2, 3}, 6},
+		{[]int64{-1000000, 2000000, -500000}, 500000},
+		{[]int64{9223372036854775800, 7}, 9223372036854775807}, // near max int64
+	}
+
+	for _, test := range tests {
+		result := Sum(test.input)
+		if result != test.expected {
+			t.Errorf("Sum(%v) = %d, expected %d", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSumFloat64 tests Sum with float64 slices
+func TestSumFloat64(t *testing.T) {
+	tests := []struct {
+		input    []float64
+		expected float64
+	}{
+		{[]float64{}, 0.0},
+		{[]float64{1.5}, 1.5},
+		{[]float64{1.5, 2.5, 3.0}, 7.0},
+		{[]float64{-1.5, 2.5, -0.5}, 0.5},
+		{[]float64{0.1, 0.2, 0.3}, 0.6},
+	}
+
+	for _, test := range tests {
+		result := Sum(test.input)
+		if math.Abs(result-test.expected) > 1e-10 {
+			t.Errorf("Sum(%v) = %f, expected %f", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSumUint tests Sum with uint slices
+func TestSumUint(t *testing.T) {
+	tests := []struct {
+		input    []uint
+		expected uint
+	}{
+		{[]uint{}, 0},
+		{[]uint{1}, 1},
+		{[]uint{1, 2, 3}, 6},
+		{[]uint{100, 200, 300}, 600},
+	}
+
+	for _, test := range tests {
+		result := Sum(test.input)
+		if result != test.expected {
+			t.Errorf("Sum(%v) = %d, expected %d", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestCompositionsBasic tests Compositions with simple inputs
+func TestCompositionsBasic(t *testing.T) {
+	result := Compositions(3, 2)
+	if len(result) == 0 {
+		t.Errorf("Compositions(3, 2) returned empty result")
+	}
+
+	// All compositions should have exactly 2 elements
+	for i, composition := range result {
+		if len(composition) != 2 {
+			t.Errorf("Composition %d has wrong length: expected 2, got %d", i, len(composition))
+		}
+		// Sum should equal 3
+		sum := Sum(composition)
+		if sum != 3 {
+			t.Errorf("Composition %d has sum %d, expected 3", i, sum)
+		}
+	}
+}
+
+// TestCompositionsCount verifies composition counts
+func TestCompositionsCount(t *testing.T) {
+	tests := []struct {
+		m        int // total sum
+		n        int // number of parts
+		expected int // expected number of compositions
+	}{
+		{1, 1, 1},    // {1}
+		{2, 1, 1},    // {2}
+		{3, 1, 1},    // {3}
+		{2, 2, 1},    // {1,1}
+		{3, 2, 2},    // {1,2}, {2,1}
+		{4, 2, 3},    // {1,3}, {2,2}, {3,1}
+		{5, 2, 4},    // {1,4}, {2,3}, {3,2}, {4,1}
+		{5, 3, 6},    // {1,1,3}, {1,2,2}, {1,3,1}, {2,1,2}, {2,2,1}, {3,1,1}
+	}
+
+	for _, test := range tests {
+		result := Compositions(test.m, test.n)
+		if len(result) != test.expected {
+			t.Errorf("Compositions(%d, %d) returned %d results, expected %d", test.m, test.n, len(result), test.expected)
+		}
+	}
+}
+
+// TestCompositionsSums verifies all compositions sum correctly
+func TestCompositionsSums(t *testing.T) {
+	for m := 1; m <= 10; m++ {
+		for n := 1; n <= m; n++ {
+			result := Compositions(m, n)
+
+			for i, composition := range result {
+				if len(composition) != n {
+					t.Errorf("Compositions(%d, %d) composition %d has wrong length: expected %d, got %d",
+						m, n, i, n, len(composition))
+				}
+
+				sum := Sum(composition)
+				if sum != m {
+					t.Errorf("Compositions(%d, %d) composition %d sums to %d, expected %d",
+						m, n, i, sum, m)
+				}
+
+				// Check all elements are positive
+				for j, val := range composition {
+					if val <= 0 {
+						t.Errorf("Compositions(%d, %d) composition %d has non-positive element at index %d: %d",
+							m, n, i, j, val)
+					}
+				}
+			}
+		}
+	}
+}
+
+// TestCompositionsUnique verifies all compositions are unique
+func TestCompositionsUnique(t *testing.T) {
+	for m := 1; m <= 6; m++ {
+		for n := 1; n <= m; n++ {
+			result := Compositions(m, n)
+			seen := make(map[string]bool)
+
+			for i, composition := range result {
+				key := ""
+				for _, v := range composition {
+					key += fmt.Sprintf("%d,", v)
+				}
+				if seen[key] {
+					t.Errorf("Compositions(%d, %d) has duplicate at index %d: %v", m, n, i, composition)
+				}
+				seen[key] = true
+			}
+		}
+	}
+}
+
+// TestBinomialKnownValues tests Binomial against known values
+func TestBinomialKnownValues(t *testing.T) {
+	tests := []struct {
+		n, k     int
+		expected int
+	}{
+		{0, 0, 1},
+		{1, 0, 1},
+		{1, 1, 1},
+		{2, 0, 1},
+		{2, 1, 2},
+		{2, 2, 1},
+		{5, 0, 1},
+		{5, 1, 5},
+		{5, 2, 10},
+		{5, 3, 10},
+		{5, 4, 5},
+		{5, 5, 1},
+		{10, 3, 120},
+		{10, 5, 252},
+		{20, 10, 184756},
+	}
+
+	for _, test := range tests {
+		result := Binomial(test.n, test.k)
+		if result != test.expected {
+			t.Errorf("Binomial(%d, %d) = %d, expected %d", test.n, test.k, result, test.expected)
+		}
+	}
+}
+
+// TestBinomialOutOfRange tests Binomial with invalid inputs
+func TestBinomialOutOfRange(t *testing.T) {
+	tests := []struct {
+		n, k int
+	}{
+		{5, -1},
+		{5, 6},
+		{0, 1},
+		{3, 4},
+		{-1, 0},
+	}
+
+	for _, test := range tests {
+		result := Binomial(test.n, test.k)
+		if result != 0 {
+			t.Errorf("Binomial(%d, %d) = %d, expected 0", test.n, test.k, result)
+		}
+	}
+}
+
+// TestBinomialSymmetry tests that C(n, k) == C(n, n-k)
+func TestBinomialSymmetry(t *testing.T) {
+	for n := 0; n <= 15; n++ {
+		for k := 0; k <= n; k++ {
+			a := Binomial(n, k)
+			b := Binomial(n, n-k)
+			if a != b {
+				t.Errorf("Binomial(%d, %d) = %d != Binomial(%d, %d) = %d", n, k, a, n, n-k, b)
+			}
+		}
+	}
+}
+
+// TestBinomialPascalRule tests that C(n, k) == C(n-1, k-1) + C(n-1, k)
+func TestBinomialPascalRule(t *testing.T) {
+	for n := 1; n <= 15; n++ {
+		for k := 1; k < n; k++ {
+			expected := Binomial(n-1, k-1) + Binomial(n-1, k)
+			result := Binomial(n, k)
+			if result != expected {
+				t.Errorf("Binomial(%d, %d) = %d, expected C(%d,%d)+C(%d,%d) = %d",
+					n, k, result, n-1, k-1, n-1, k, expected)
+			}
+		}
+	}
+}
+
+// TestBinomialRowSum tests that the sum of row n of Pascal's triangle is 2^n
+func TestBinomialRowSum(t *testing.T) {
+	for n := 0; n <= 20; n++ {
+		sum := 0
+		for k := 0; k <= n; k++ {
+			sum += Binomial(n, k)
+		}
+		expected := 1 << n
+		if sum != expected {
+			t.Errorf("Sum of Binomial(%d, 0..%d) = %d, expected %d", n, n, sum, expected)
+		}
 	}
 }
