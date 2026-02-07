@@ -75,7 +75,7 @@ Trivial.
 
 | Part | Answer |
 |------|--------|
-|    1 |   1517 |
+|    1 |   1371 |
 |    2 |   2117 |
 
 ## Day 9
@@ -113,3 +113,12 @@ Go's JSON library made it simple.
 |------|--------|
 |    1 | 191164 |
 |    2 |  87842 |
+
+## Day 13
+
+Trivial. The permutation generator I made for a previous day came in very handy. These puzzles have been very simple so far. AI (Github Copilot, specifically) has been very handy doing 80% of the typing for me. I learned about the range keyword with loops. That's nice.
+
+| Part | Answer |
+|------|--------|
+|    1 |    709 |
+|    2 |    668 |
