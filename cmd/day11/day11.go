@@ -9,7 +9,7 @@ import (
 
 // hasStraight returns true if the password includes an increasing straight of at least three letters.
 func hasStraight(password string) bool {
-	for i := 0; i < len(password)-2; i++ {
+	for i := range len(password)-2 {
 		if password[i]+1 == password[i+1] && password[i]+2 == password[i+2] {
 			return true
 		}
@@ -24,7 +24,7 @@ func hasNoInvalidCharacters(password string) bool {
 
 // hasTwoPairs returns true if the password contains at least two different, non-overlapping pairs of letters.
 func hasTwoPairs(password string) bool {
-	for i := 0; i < len(password)-3; i++ {
+	for i := range len(password)-3 {
 		if password[i] == password[i+1] {
 			// Found a pair, now look for another pair
 			for j := i + 2; j < len(password)-1; j++ {

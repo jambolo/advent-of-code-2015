@@ -47,7 +47,7 @@ func hasNoBadWords(s string) bool {
 
 // hasRepeatedPair returns true if the string contains a pair of any two letters that appears at least twice in the string without overlapping.
 func hasRepeatedPair(s string) bool {
-	for i := 0; i < len(s)-1; i++ {
+	for i := range len(s)-1 {
 		pair := s[i : i+2]
 		if strings.Contains(s[i+2:], pair) {
 			return true
@@ -58,7 +58,7 @@ func hasRepeatedPair(s string) bool {
 
 // hasSplitPair returns true if the string contains a pair of any two letters with a letter in between them.
 func hasSplitPair(s string) bool {
-	for i := 0; i < len(s)-2; i++ {
+	for i := range len(s)-2 {
 		if s[i] == s[i+2] {
 			return true
 		}

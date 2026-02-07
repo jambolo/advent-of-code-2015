@@ -10,10 +10,11 @@ import (
 
 func lookAndSay(input string) string {
 	var b strings.Builder
-	for i := 0; i < len(input); {
+	length := len(input)
+	for i := 0; i < length; {
 		ch := input[i]
 		count := 1
-		for i+count < len(input) && input[i+count] == ch {
+		for i+count < length && input[i+count] == ch {
 			count++
 		}
 		b.WriteString(strconv.Itoa(count))
@@ -40,7 +41,7 @@ func main() {
 		iterations = 50
 	}
 
-	for i := 0; i < iterations; i++ {
+	for range iterations {
 		input = lookAndSay(input)
 	}
 
