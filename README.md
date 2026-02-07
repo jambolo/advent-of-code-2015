@@ -122,3 +122,14 @@ Trivial. The permutation generator I made for a previous day came in very handy.
 |------|--------|
 |    1 |    709 |
 |    2 |    668 |
+
+## Day 14
+
+Uh oh. Not getting the correct answer for part 2 and it looks correct to me.
+
+| Part | Answer |
+|------|--------|
+|    1 |   2660 |
+|    2 |  *1564 |
+
+* *Not the correct answer*
