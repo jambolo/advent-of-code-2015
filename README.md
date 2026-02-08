@@ -142,3 +142,12 @@ Trivial. Claude and Copilot have been very helpful pointing out ways to make my 
 |------|----------|
 |    1 | 13882464 |
 |    2 | 11171160 |
+
+## Day 16
+
+Trivial.
+
+| Part | Answer |
+|------|--------|
+|    1 |     40 |
+|    2 |    241 |
