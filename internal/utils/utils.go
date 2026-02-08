@@ -1,7 +1,7 @@
 package utils
 
-// Sum returns the sum of all elements in a slice of numeric types.
-func Sum[T interface {
+// SliceSum returns the sum of all elements in a slice of numeric types.
+func SliceSum[T interface {
 	~int | ~int8 | ~int16 | ~int32 | ~int64 |
 		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr |
 		~float32 | ~float64
@@ -9,6 +9,38 @@ func Sum[T interface {
 	var result T
 	for _, v := range slice {
 		result += v
+	}
+	return result
+}
+
+// SliceMax returns the maximum of all elements in a slice of numeric types
+func SliceMax[T interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64 |
+		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr |
+		~float32 | ~float64
+}](slice []T) T {
+	if len(slice) == 0 {
+		panic("SliceMax: empty slice")
+	}
+	result := slice[0]
+	for _, e := range slice[1:] {
+		result = max(result, e)
+	}
+	return result
+}
+
+// SliceMin returns the minimum of all elements in a slice of numeric types
+func SliceMin[T interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64 |
+		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr |
+		~float32 | ~float64
+}](slice []T) T {
+	if len(slice) == 0 {
+		panic("SliceMin: empty slice")
+	}
+	result := slice[0]
+	for _, e := range slice[1:] {
+		result = min(result, e)
 	}
 	return result
 }

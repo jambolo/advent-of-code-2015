@@ -131,7 +131,7 @@ func main() {
 		}
 
 		// Count the number of lights that are on
-		brightness := utils.Sum(grid)
+		brightness := utils.SliceSum(grid)
 		fmt.Printf("Total brightness: %d\n", brightness)
 	}
 }

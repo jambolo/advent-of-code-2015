@@ -80,13 +80,13 @@ func TestPermutationsCount(t *testing.T) {
 		n        int
 		expected int
 	}{
-		{0, 1},       // 0! = 1
-		{1, 1},       // 1! = 1
-		{2, 2},       // 2! = 2
-		{3, 6},       // 3! = 6
-		{4, 24},      // 4! = 24
-		{5, 120},     // 5! = 120
-		{6, 720},     // 6! = 720
+		{0, 1},   // 0! = 1
+		{1, 1},   // 1! = 1
+		{2, 2},   // 2! = 2
+		{3, 6},   // 3! = 6
+		{4, 24},  // 4! = 24
+		{5, 120}, // 5! = 120
+		{6, 720}, // 6! = 720
 	}
 
 	for _, test := range tests {
@@ -198,8 +198,8 @@ func TestPermutationsIndependence(t *testing.T) {
 	}
 }
 
-// TestSumInt tests Sum with int slices
-func TestSumInt(t *testing.T) {
+// TestSliceSumInt tests SliceSum with int slices
+func TestSliceSumInt(t *testing.T) {
 	tests := []struct {
 		input    []int
 		expected int
@@ -213,15 +213,15 @@ func TestSumInt(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		result := Sum(test.input)
+		result := SliceSum(test.input)
 		if result != test.expected {
-			t.Errorf("Sum(%v) = %d, expected %d", test.input, result, test.expected)
+			t.Errorf("SliceSum(%v) = %d, expected %d", test.input, result, test.expected)
 		}
 	}
 }
 
-// TestSumInt64 tests Sum with int64 slices
-func TestSumInt64(t *testing.T) {
+// TestSliceSumInt64 tests SliceSum with int64 slices
+func TestSliceSumInt64(t *testing.T) {
 	tests := []struct {
 		input    []int64
 		expected int64
@@ -234,15 +234,15 @@ func TestSumInt64(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		result := Sum(test.input)
+		result := SliceSum(test.input)
 		if result != test.expected {
-			t.Errorf("Sum(%v) = %d, expected %d", test.input, result, test.expected)
+			t.Errorf("SliceSum(%v) = %d, expected %d", test.input, result, test.expected)
 		}
 	}
 }
 
-// TestSumFloat64 tests Sum with float64 slices
-func TestSumFloat64(t *testing.T) {
+// TestSliceSumFloat64 tests SliceSum with float64 slices
+func TestSliceSumFloat64(t *testing.T) {
 	tests := []struct {
 		input    []float64
 		expected float64
@@ -255,15 +255,15 @@ func TestSumFloat64(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		result := Sum(test.input)
+		result := SliceSum(test.input)
 		if math.Abs(result-test.expected) > 1e-10 {
-			t.Errorf("Sum(%v) = %f, expected %f", test.input, result, test.expected)
+			t.Errorf("SliceSum(%v) = %f, expected %f", test.input, result, test.expected)
 		}
 	}
 }
 
-// TestSumUint tests Sum with uint slices
-func TestSumUint(t *testing.T) {
+// TestSliceSumUint tests SliceSum with uint slices
+func TestSliceSumUint(t *testing.T) {
 	tests := []struct {
 		input    []uint
 		expected uint
@@ -275,10 +275,210 @@ func TestSumUint(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		result := Sum(test.input)
+		result := SliceSum(test.input)
 		if result != test.expected {
-			t.Errorf("Sum(%v) = %d, expected %d", test.input, result, test.expected)
+			t.Errorf("SliceSum(%v) = %d, expected %d", test.input, result, test.expected)
 		}
+	}
+}
+
+// TestSliceMaxInt tests SliceMax with int slices
+func TestSliceMaxInt(t *testing.T) {
+	tests := []struct {
+		input    []int
+		expected int
+	}{
+		{[]int{1}, 1},
+		{[]int{1, 2, 3}, 3},
+		{[]int{3, 2, 1}, 3},
+		{[]int{2, 3, 1}, 3},
+		{[]int{-3, -2, -1}, -1},
+		{[]int{-1, 0, 1}, 1},
+		{[]int{5, 5, 5}, 5},
+		{[]int{0}, 0},
+		{[]int{math.MaxInt, 0, -1}, math.MaxInt},
+		{[]int{math.MinInt, 0}, 0},
+		{[]int{math.MinInt, math.MaxInt}, math.MaxInt},
+	}
+
+	for _, test := range tests {
+		result := SliceMax(test.input)
+		if result != test.expected {
+			t.Errorf("SliceMax(%v) = %d, expected %d", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSliceMaxFloat64 tests SliceMax with float64 slices
+func TestSliceMaxFloat64(t *testing.T) {
+	tests := []struct {
+		input    []float64
+		expected float64
+	}{
+		{[]float64{1.5}, 1.5},
+		{[]float64{1.5, 2.5, 3.5}, 3.5},
+		{[]float64{-1.5, -0.5, 0.5}, 0.5},
+		{[]float64{0.1, 0.2, 0.3}, 0.3},
+		{[]float64{math.MaxFloat64, 0}, math.MaxFloat64},
+		{[]float64{-math.MaxFloat64, 0}, 0},
+	}
+
+	for _, test := range tests {
+		result := SliceMax(test.input)
+		if result != test.expected {
+			t.Errorf("SliceMax(%v) = %f, expected %f", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSliceMaxUint tests SliceMax with uint slices
+func TestSliceMaxUint(t *testing.T) {
+	tests := []struct {
+		input    []uint
+		expected uint
+	}{
+		{[]uint{1}, 1},
+		{[]uint{1, 2, 3}, 3},
+		{[]uint{3, 2, 1}, 3},
+		{[]uint{0, 0, 0}, 0},
+	}
+
+	for _, test := range tests {
+		result := SliceMax(test.input)
+		if result != test.expected {
+			t.Errorf("SliceMax(%v) = %d, expected %d", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSliceMaxEmptyPanics tests that SliceMax panics on empty slice
+func TestSliceMaxEmptyPanics(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("SliceMax([]int{}) did not panic")
+		}
+	}()
+	SliceMax([]int{})
+}
+
+// TestSliceMaxSingleElement tests SliceMax with single-element slices
+func TestSliceMaxSingleElement(t *testing.T) {
+	if SliceMax([]int{42}) != 42 {
+		t.Errorf("SliceMax([]int{42}) != 42")
+	}
+	if SliceMax([]int{-42}) != -42 {
+		t.Errorf("SliceMax([]int{-42}) != -42")
+	}
+	if SliceMax([]int{0}) != 0 {
+		t.Errorf("SliceMax([]int{0}) != 0")
+	}
+}
+
+// TestSliceMaxDuplicateMax tests SliceMax when max appears multiple times
+func TestSliceMaxDuplicateMax(t *testing.T) {
+	result := SliceMax([]int{3, 1, 3, 2, 3})
+	if result != 3 {
+		t.Errorf("SliceMax([]int{3, 1, 3, 2, 3}) = %d, expected 3", result)
+	}
+}
+
+// TestSliceMinInt tests SliceMin with int slices
+func TestSliceMinInt(t *testing.T) {
+	tests := []struct {
+		input    []int
+		expected int
+	}{
+		{[]int{1}, 1},
+		{[]int{1, 2, 3}, 1},
+		{[]int{3, 2, 1}, 1},
+		{[]int{2, 1, 3}, 1},
+		{[]int{-3, -2, -1}, -3},
+		{[]int{-1, 0, 1}, -1},
+		{[]int{5, 5, 5}, 5},
+		{[]int{0}, 0},
+		{[]int{math.MinInt, 0, 1}, math.MinInt},
+		{[]int{math.MaxInt, 0}, 0},
+		{[]int{math.MinInt, math.MaxInt}, math.MinInt},
+	}
+
+	for _, test := range tests {
+		result := SliceMin(test.input)
+		if result != test.expected {
+			t.Errorf("SliceMin(%v) = %d, expected %d", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSliceMinFloat64 tests SliceMin with float64 slices
+func TestSliceMinFloat64(t *testing.T) {
+	tests := []struct {
+		input    []float64
+		expected float64
+	}{
+		{[]float64{1.5}, 1.5},
+		{[]float64{1.5, 2.5, 3.5}, 1.5},
+		{[]float64{-1.5, -0.5, 0.5}, -1.5},
+		{[]float64{0.1, 0.2, 0.3}, 0.1},
+		{[]float64{-math.MaxFloat64, 0}, -math.MaxFloat64},
+		{[]float64{math.MaxFloat64, 0}, 0},
+	}
+
+	for _, test := range tests {
+		result := SliceMin(test.input)
+		if result != test.expected {
+			t.Errorf("SliceMin(%v) = %f, expected %f", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSliceMinUint tests SliceMin with uint slices
+func TestSliceMinUint(t *testing.T) {
+	tests := []struct {
+		input    []uint
+		expected uint
+	}{
+		{[]uint{1}, 1},
+		{[]uint{1, 2, 3}, 1},
+		{[]uint{3, 2, 1}, 1},
+		{[]uint{0, 0, 0}, 0},
+	}
+
+	for _, test := range tests {
+		result := SliceMin(test.input)
+		if result != test.expected {
+			t.Errorf("SliceMin(%v) = %d, expected %d", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSliceMinEmptyPanics tests that SliceMin panics on empty slice
+func TestSliceMinEmptyPanics(t *testing.T) {
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("SliceMin([]int{}) did not panic")
+		}
+	}()
+	SliceMin([]int{})
+}
+
+// TestSliceMinSingleElement tests SliceMin with single-element slices
+func TestSliceMinSingleElement(t *testing.T) {
+	if SliceMin([]int{42}) != 42 {
+		t.Errorf("SliceMin([]int{42}) != 42")
+	}
+	if SliceMin([]int{-42}) != -42 {
+		t.Errorf("SliceMin([]int{-42}) != -42")
+	}
+	if SliceMin([]int{0}) != 0 {
+		t.Errorf("SliceMin([]int{0}) != 0")
+	}
+}
+
+// TestSliceMinDuplicateMin tests SliceMin when min appears multiple times
+func TestSliceMinDuplicateMin(t *testing.T) {
+	result := SliceMin([]int{3, 1, 3, 1, 3})
+	if result != 1 {
+		t.Errorf("SliceMin([]int{3, 1, 3, 1, 3}) = %d, expected 1", result)
 	}
 }
 
@@ -295,7 +495,7 @@ func TestCompositionsBasic(t *testing.T) {
 			t.Errorf("Composition %d has wrong length: expected 2, got %d", i, len(composition))
 		}
 		// Sum should equal 3
-		sum := Sum(composition)
+		sum := SliceSum(composition)
 		if sum != 3 {
 			t.Errorf("Composition %d has sum %d, expected 3", i, sum)
 		}
@@ -309,14 +509,14 @@ func TestCompositionsCount(t *testing.T) {
 		n        int // number of parts
 		expected int // expected number of compositions
 	}{
-		{1, 1, 1},    // {1}
-		{2, 1, 1},    // {2}
-		{3, 1, 1},    // {3}
-		{2, 2, 1},    // {1,1}
-		{3, 2, 2},    // {1,2}, {2,1}
-		{4, 2, 3},    // {1,3}, {2,2}, {3,1}
-		{5, 2, 4},    // {1,4}, {2,3}, {3,2}, {4,1}
-		{5, 3, 6},    // {1,1,3}, {1,2,2}, {1,3,1}, {2,1,2}, {2,2,1}, {3,1,1}
+		{1, 1, 1}, // {1}
+		{2, 1, 1}, // {2}
+		{3, 1, 1}, // {3}
+		{2, 2, 1}, // {1,1}
+		{3, 2, 2}, // {1,2}, {2,1}
+		{4, 2, 3}, // {1,3}, {2,2}, {3,1}
+		{5, 2, 4}, // {1,4}, {2,3}, {3,2}, {4,1}
+		{5, 3, 6}, // {1,1,3}, {1,2,2}, {1,3,1}, {2,1,2}, {2,2,1}, {3,1,1}
 	}
 
 	for _, test := range tests {
@@ -339,7 +539,7 @@ func TestCompositionsSums(t *testing.T) {
 						m, n, i, n, len(composition))
 				}
 
-				sum := Sum(composition)
+				sum := SliceSum(composition)
 				if sum != m {
 					t.Errorf("Compositions(%d, %d) composition %d sums to %d, expected %d",
 						m, n, i, sum, m)
