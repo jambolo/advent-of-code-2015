@@ -2,8 +2,13 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"regexp"
+	"strconv"
 
-	setup "github.com/jambolo/advent-of-code-2015/internal/setup"
+	"github.com/jambolo/advent-of-code-2015/internal/load"
+	"github.com/jambolo/advent-of-code-2015/internal/setup"
+	"github.com/jambolo/advent-of-code-2015/internal/utils"
 )
 
 // isFlying returns true if the reindeer is flying at the given time, false if it is resting.
@@ -15,73 +20,108 @@ func isFlying(time int, flyTime int, cycleTime int) bool {
 	return false
 }
 
+type reindeer struct {
+	speed, flyTime, restTime, cycleTime, cycleDistance int
+}
+
 func main() {
 	day := 14
 
 	// Grab the command line parameters (file path and part number)
-	_, part := setup.Parameters(day)
+	pathName, part := setup.Parameters(day)
 
 	// Print a banner showing the current day and if it is part 1 or part 2
 	setup.Banner(day, part)
 
-	cometSpeed := 14
-	cometFlyTime := 10
-	cometRestTime := 127
+	lines, err := load.ReadLines(pathName)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	dancerSpeed := 16
-	dancerFlyTime := 11
-	dancerRestTime := 162
+	re := regexp.MustCompile(`(\w+) can fly (\d+) km/s for (\d+) seconds, but then must rest for (\d+) seconds.`)
 
-	cometCycleTime := cometFlyTime + cometRestTime
-	cometCycleDistance := cometSpeed * cometFlyTime
+	reindeers := make(map[string]reindeer)
+	for _, line := range lines {
+		matches := re.FindStringSubmatch(line)
+		if len(matches) != 5 {
+			log.Fatalf("unexpected line format: %s", line)
+		}
 
-	dancerCycleTime := dancerFlyTime + dancerRestTime
-	dancerCycleDistance := dancerSpeed * dancerFlyTime
+		name := matches[1]
+		speed, err := strconv.Atoi(matches[2])
+		if err != nil {
+			log.Fatalf("invalid speed: %s", matches[2])
+		}
+		flyTime, err := strconv.Atoi(matches[3])
+		if err != nil {
+			log.Fatalf("invalid fly time: %s", matches[3])
+		}
+		restTime, err := strconv.Atoi(matches[4])
+		if err != nil {
+			log.Fatalf("invalid rest time: %s", matches[4])
+		}
 
-	time := 2503
+		cycleTime := flyTime + restTime
+		cycleDistance := speed * flyTime
+
+		reindeers[name] = reindeer{
+			speed:         speed,
+			flyTime:       flyTime,
+			restTime:      restTime,
+			cycleTime:     cycleTime,
+			cycleDistance: cycleDistance,
+		}
+	}
+
+	totalTime := 2503
 
 	if part == 1 {
-		cometTotalCycles := time / cometCycleTime
-		cometRemainingTime := time % cometCycleTime
-		cometRemainingDistance := min(cometFlyTime, cometRemainingTime) * cometSpeed
-		cometTotalDistance := cometTotalCycles*cometCycleDistance + cometRemainingDistance
+		var distances []int
+		for _, r := range reindeers {
+			cycles := totalTime / r.cycleTime
+			timeInLastCycle := totalTime % r.cycleTime
+			distanceInLastCycle := min(r.flyTime, timeInLastCycle) * r.speed // After last full cycle
+			distances = append(distances, cycles*r.cycleDistance+distanceInLastCycle)
+		}
 
-		dancerTotalCycles := time / dancerCycleTime
-		dancerRemainingTime := time % dancerCycleTime
-		dancerRemainingDistance := min(dancerFlyTime, dancerRemainingTime) * dancerSpeed
-		dancerTotalDistance := dancerTotalCycles*dancerCycleDistance + dancerRemainingDistance
-
-		fmt.Printf("Winner distance: %d\n", max(cometTotalDistance, dancerTotalDistance))
+		fmt.Printf("Winner distance: %d\n", utils.SliceMax(distances))
 	}
 
 	if part == 2 {
-		cometPoints := 0
-		dancerPoints := 0
-		cometDistance := 0
-		dancerDistance := 0
-
-		for t := 1; t <= time; t++ {
-			if isFlying(t, cometFlyTime, cometCycleTime) {
-				cometDistance += cometSpeed
-			}
-
-			if isFlying(t, dancerFlyTime, dancerCycleTime) {
-				dancerDistance += dancerSpeed
-			}
-
-			if cometDistance >= dancerDistance {
-				cometPoints++
-			}
-			if dancerDistance >= cometDistance {
-				dancerPoints++
-			}
-
-			cf := isFlying(t, cometFlyTime, cometCycleTime)
-			df := isFlying(t, dancerFlyTime, dancerCycleTime)
-			fmt.Printf("%d: comet: %v %d %d, dancer: %v %d %d\n", t, cf, cometDistance, cometPoints, df, dancerDistance, dancerPoints)
+		distances := make(map[string]int)
+		for name := range reindeers {
+			distances[name] = 0
 		}
-		fmt.Printf("Comet points: %d\n", cometPoints)
-		fmt.Printf("Dancer points: %d\n", dancerPoints)
-		fmt.Printf("Winner points: %d\n", max(cometPoints, dancerPoints))
+
+		points := make(map[string]int)
+		for name := range reindeers {
+			points[name] = 0
+		}
+
+		for t := 1; t <= totalTime; t++ {
+			// Update the distances for each reindeer and track the leading distance
+			leadingDistance := 0
+			for name, r := range reindeers {
+				if isFlying(t, r.flyTime, r.cycleTime) {
+					distances[name] = distances[name] + r.speed
+				}
+				leadingDistance = max(leadingDistance, distances[name])
+			}
+
+			// Award points to the reindeer(s) in the lead
+			for name, distance := range distances {
+				if distance >= leadingDistance {
+					points[name] = points[name] + 1
+				}
+			}
+		}
+
+		// Find the reindeer with the most points
+		mostPoints := 0
+		for _, p := range points {
+			mostPoints = max(mostPoints, p)
+		}
+
+		fmt.Printf("Winner points: %d\n", mostPoints)
 	}
 }

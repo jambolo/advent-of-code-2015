@@ -30,3 +30,15 @@ func Permutations(n int) [][]int {
 	generate(n)
 	return result
 }
+
+// SliceMax returns the maximum of the elements slice
+func SliceMax(elements []int) int {
+	if len(elements) == 0 {
+		panic("Max: empty slice")
+	}
+	result := elements[0]
+	for _, e := range elements[1:] {
+		result = max(result, e)
+	}
+	return result
+}

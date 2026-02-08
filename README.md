@@ -125,11 +125,9 @@ Trivial. The permutation generator I made for a previous day came in very handy.
 
 ## Day 14
 
-Uh oh. Not getting the correct answer for part 2 and it looks correct to me.
+Trivial, except that I misread the description and overlooked the input data.
 
 | Part | Answer |
 |------|--------|
 |    1 |   2660 |
-|    2 |  *1564 |
-
-* *Not the correct answer*
+|    2 |   1256 |
