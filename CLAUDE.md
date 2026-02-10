@@ -25,7 +25,7 @@ Go module: `github.com/jambolo/advent-of-code-2015` (Go 1.25.7, no external deps
 ```
 cmd/dayXX/dayXX.go      # Each day's solution (standalone main package)
 data/dayXX/              # Puzzle inputs and examples
-internal/common/load.go  # Shared utility: ReadLines(path) reads file into []string
+internal/common/load.go  # Shared utility: Lines(path) reads file into []string
 bin/                     # Compiled binaries (gitignored)
 ```
 
@@ -33,7 +33,7 @@ bin/                     # Compiled binaries (gitignored)
 
 - Each day: create `cmd/dayXX/dayXX.go` and `data/dayXX/dayXX-input.txt`.
 - Solutions use `flag` for CLI args, print a banner (`=== Day X - Part Y ===`), then output results.
-- Import shared file reader as `"github.com/jambolo/advent-of-code-2015/internal/load"`, call `load.ReadLines(path)`.
+- Import shared file reader as `"github.com/jambolo/advent-of-code-2015/internal/load"`, call `load.Lines(path)`.
 - Import setup as `"github.com/jambolo/advent-of-code-2015/internal/setup"`.
 - Import utils as `"github.com/jambolo/advent-of-code-2015/internal/utils"`.
 - The Makefile auto-discovers days by scanning `cmd/`.
@@ -42,7 +42,7 @@ bin/                     # Compiled binaries (gitignored)
 
 When asked to "set up a new day" (day NN):
 
-1. Create `cmd/dayNN/dayNN.go` with only the skeleton: parse flags, print banner, read input via `load.ReadLines`. It may be incomplete and not compile.
+1. Create `cmd/dayNN/dayNN.go` with only the skeleton: parse flags, print banner, read input via `load.Lines`. It may be incomplete and not compile.
 2. Create an empty `data/dayNN/dayNN-input.txt`.
 3. Add `bin/dayNN` as a dependency of the `build` target in the Makefile.
 4. Add a `## Day NN` heading at the end of `README.md`.

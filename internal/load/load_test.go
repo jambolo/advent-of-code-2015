@@ -19,11 +19,11 @@ func tempFile(t *testing.T, content string) string {
 	return f.Name()
 }
 
-// ReadLines tests
+// Lines tests
 
 func TestReadLines_MultipleLines(t *testing.T) {
 	path := tempFile(t, "aaa\nbbb\nccc\n")
-	lines, err := ReadLines(path)
+	lines, err := Lines(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -37,7 +37,7 @@ func TestReadLines_MultipleLines(t *testing.T) {
 
 func TestReadLines_SingleLine(t *testing.T) {
 	path := tempFile(t, "hello\n")
-	lines, err := ReadLines(path)
+	lines, err := Lines(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,7 +48,7 @@ func TestReadLines_SingleLine(t *testing.T) {
 
 func TestReadLines_NoTrailingNewline(t *testing.T) {
 	path := tempFile(t, "aaa\nbbb")
-	lines, err := ReadLines(path)
+	lines, err := Lines(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -62,7 +62,7 @@ func TestReadLines_NoTrailingNewline(t *testing.T) {
 
 func TestReadLines_EmptyFile(t *testing.T) {
 	path := tempFile(t, "")
-	lines, err := ReadLines(path)
+	lines, err := Lines(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -74,7 +74,7 @@ func TestReadLines_EmptyFile(t *testing.T) {
 
 func TestReadLines_BlankLines(t *testing.T) {
 	path := tempFile(t, "aaa\n\nbbb\n")
-	lines, err := ReadLines(path)
+	lines, err := Lines(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -88,7 +88,7 @@ func TestReadLines_BlankLines(t *testing.T) {
 
 func TestReadLines_MultipleTrailingNewlines(t *testing.T) {
 	path := tempFile(t, "aaa\n\n\n")
-	lines, err := ReadLines(path)
+	lines, err := Lines(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -99,17 +99,17 @@ func TestReadLines_MultipleTrailingNewlines(t *testing.T) {
 }
 
 func TestReadLines_NonexistentFile(t *testing.T) {
-	_, err := ReadLines("/nonexistent/path/file.txt")
+	_, err := Lines("/nonexistent/path/file.txt")
 	if err == nil {
 		t.Fatal("expected error for nonexistent file")
 	}
 }
 
-// ReadAll tests
+// All tests
 
 func TestReadAll_Basic(t *testing.T) {
 	path := tempFile(t, "hello world\n")
-	content, err := ReadAll(path)
+	content, err := All(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -120,7 +120,7 @@ func TestReadAll_Basic(t *testing.T) {
 
 func TestReadAll_MultiLine(t *testing.T) {
 	path := tempFile(t, "line1\nline2\nline3\n")
-	content, err := ReadAll(path)
+	content, err := All(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -131,7 +131,7 @@ func TestReadAll_MultiLine(t *testing.T) {
 
 func TestReadAll_NoTrailingNewline(t *testing.T) {
 	path := tempFile(t, "no newline")
-	content, err := ReadAll(path)
+	content, err := All(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -142,7 +142,7 @@ func TestReadAll_NoTrailingNewline(t *testing.T) {
 
 func TestReadAll_EmptyFile(t *testing.T) {
 	path := tempFile(t, "")
-	content, err := ReadAll(path)
+	content, err := All(path)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -152,7 +152,7 @@ func TestReadAll_EmptyFile(t *testing.T) {
 }
 
 func TestReadAll_NonexistentFile(t *testing.T) {
-	_, err := ReadAll("/nonexistent/path/file.txt")
+	_, err := All("/nonexistent/path/file.txt")
 	if err == nil {
 		t.Fatal("expected error for nonexistent file")
 	}

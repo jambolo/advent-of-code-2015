@@ -158,3 +158,12 @@ Go is lame. I had Claude write a function that generates combinations for me. Wi
 |------|--------|
 |    1 |   4372 |
 |    2 |      4 |
+
+## Day 18
+
+Game of Life. Trivial. The only tricky part was that the instructions are misleading because the lights that are supposed to always be on in part 2 aren't on in the input.
+
+| Part | Answer |
+|------|--------|
+|    1 |    821 |
+|    2 |    886 |

@@ -47,7 +47,7 @@ func main() {
 	path, part := setup.Parameters(day)
 	setup.Banner(day, part)
 
-	lines, err := load.ReadLines(path)
+	lines, err := load.Lines(path)
 	if err != nil {
 		log.Fatal(err)
 	}

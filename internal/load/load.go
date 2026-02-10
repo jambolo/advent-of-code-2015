@@ -6,8 +6,8 @@ import (
 	"strings"
 )
 
-// ReadLines reads all lines from the provided file path.
-func ReadLines(path string) ([]string, error) {
+// Lines reads all lines from the provided file path.
+func Lines(path string) ([]string, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -15,13 +15,26 @@ func ReadLines(path string) ([]string, error) {
 	return strings.Split(strings.TrimRight(string(data), "\n"), "\n"), nil
 }
 
-// ReadAll reads the entire content of the provided file path as a single string.
-func ReadAll(path string) (string, error) {
+// All reads the entire content of the provided file path as a single string.
+func All(path string) (string, error) {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return "", err
 	}
 	return strings.TrimRight(string(data), "\n"), nil
+}
+
+// Map reads the content of the provided file path and constructs a 2D map of bytes.
+func Map(path string) ([][]byte, error) {
+	lines, err := Lines(path)
+	if err != nil {
+		return nil, err
+	}
+	result := make([][]byte, len(lines))
+	for i, line := range lines {
+		result[i] = []byte(line)
+	}
+	return result, nil
 }
 
 // Json reads the content of the provided file path and unmarshals it into the provided variable.

@@ -18,7 +18,7 @@ func main() {
 	setup.Banner(day, part)
 
 	// Load the data from the specified file. Abort on error.
-	input, err := load.ReadAll(filePath)
+	input, err := load.All(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}

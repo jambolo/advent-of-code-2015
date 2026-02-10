@@ -18,7 +18,7 @@ func main() {
 	filePath, part := setup.Parameters(day)
 	setup.Banner(day, part)
 
-	lines, err := load.ReadLines(filePath)
+	lines, err := load.Lines(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}

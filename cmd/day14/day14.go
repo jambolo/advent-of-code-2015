@@ -29,7 +29,7 @@ func main() {
 	// Print a banner showing the current day and if it is part 1 or part 2
 	setup.Banner(day, part)
 
-	lines, err := load.ReadLines(pathName)
+	lines, err := load.Lines(pathName)
 	if err != nil {
 		log.Fatal(err)
 	}
