@@ -7,44 +7,29 @@ import (
 	"testing"
 )
 
-// TestPermutationsZero tests Permutations with n=0
-func TestPermutationsZero(t *testing.T) {
-	result := Permutations(0)
+// TestPermutationsZeroZero tests Permutations(0, 0)
+func TestPermutationsZeroZero(t *testing.T) {
+	result := Permutations(0, 0)
 	if len(result) != 1 {
-		t.Errorf("Expected 1 permutation for n=0, got %d", len(result))
+		t.Errorf("Expected 1 permutation for (0,0), got %d", len(result))
 	}
 	if len(result[0]) != 0 {
-		t.Errorf("Expected empty permutation for n=0, got %v", result[0])
+		t.Errorf("Expected empty permutation for (0,0), got %v", result[0])
 	}
 }
 
-// TestPermutationsOne tests Permutations with n=1
-func TestPermutationsOne(t *testing.T) {
-	result := Permutations(1)
-	if len(result) != 1 {
-		t.Errorf("Expected 1 permutation for n=1, got %d", len(result))
+// TestPermutationsFullSmall tests Permutations(n, n) for small n
+func TestPermutationsFullSmall(t *testing.T) {
+	result := Permutations(1, 1)
+	if len(result) != 1 || len(result[0]) != 1 || result[0][0] != 0 {
+		t.Errorf("Expected [[0]] for (1,1), got %v", result)
 	}
-	if len(result[0]) != 1 || result[0][0] != 0 {
-		t.Errorf("Expected [[0]] for n=1, got %v", result)
-	}
-}
 
-// TestPermutationsTwo tests Permutations with n=2
-func TestPermutationsTwo(t *testing.T) {
-	result := Permutations(2)
+	result = Permutations(2, 2)
 	expected := [][]int{{0, 1}, {1, 0}}
-
 	if len(result) != 2 {
-		t.Errorf("Expected 2 permutations for n=2, got %d", len(result))
+		t.Errorf("Expected 2 permutations for (2,2), got %d", len(result))
 	}
-
-	for i, perm := range result {
-		if len(perm) != 2 {
-			t.Errorf("Permutation %d has wrong length: expected 2, got %d", i, len(perm))
-		}
-	}
-
-	// Check that both expected permutations are present
 	for _, exp := range expected {
 		found := false
 		for _, perm := range result {
@@ -59,111 +44,154 @@ func TestPermutationsTwo(t *testing.T) {
 	}
 }
 
-// TestPermutationsThree tests Permutations with n=3
-func TestPermutationsThree(t *testing.T) {
-	result := Permutations(3)
-
+// TestPermutationsPartialValues tests specific Permutations(n, r) with r < n
+func TestPermutationsPartialValues(t *testing.T) {
+	result := Permutations(3, 2)
+	expected := [][]int{{0, 1}, {0, 2}, {1, 0}, {1, 2}, {2, 0}, {2, 1}}
 	if len(result) != 6 {
-		t.Errorf("Expected 6 permutations for n=3, got %d", len(result))
+		t.Errorf("Expected 6 permutations for (3,2), got %d", len(result))
 	}
-
-	for i, perm := range result {
-		if len(perm) != 3 {
-			t.Errorf("Permutation %d has wrong length: expected 3, got %d", i, len(perm))
+	for _, exp := range expected {
+		found := false
+		for _, perm := range result {
+			if slices.Equal(perm, exp) {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("Expected permutation %v not found in Permutations(3,2)", exp)
 		}
 	}
 }
 
-// TestPermutationsCount verifies the correct count for various n values
+// TestPermutationsROne tests Permutations(n, 1)
+func TestPermutationsROne(t *testing.T) {
+	for n := 1; n <= 5; n++ {
+		result := Permutations(n, 1)
+		if len(result) != n {
+			t.Errorf("Permutations(%d, 1) returned %d results, expected %d", n, len(result), n)
+		}
+		for i, perm := range result {
+			if len(perm) != 1 {
+				t.Errorf("Permutations(%d, 1)[%d] has length %d, expected 1", n, i, len(perm))
+			}
+		}
+	}
+}
+
+// TestPermutationsCount verifies P(n, r) = n! / (n-r)!
 func TestPermutationsCount(t *testing.T) {
 	tests := []struct {
-		n        int
+		n, r     int
 		expected int
 	}{
-		{0, 1},   // 0! = 1
-		{1, 1},   // 1! = 1
-		{2, 2},   // 2! = 2
-		{3, 6},   // 3! = 6
-		{4, 24},  // 4! = 24
-		{5, 120}, // 5! = 120
-		{6, 720}, // 6! = 720
+		{0, 0, 1},
+		{1, 0, 1},
+		{1, 1, 1},
+		{2, 0, 1},
+		{2, 1, 2},
+		{2, 2, 2},
+		{3, 0, 1},
+		{3, 1, 3},
+		{3, 2, 6},
+		{3, 3, 6},
+		{4, 2, 12},
+		{4, 3, 24},
+		{4, 4, 24},
+		{5, 2, 20},
+		{5, 3, 60},
+		{5, 5, 120},
+		{6, 3, 120},
+		{6, 6, 720},
 	}
 
 	for _, test := range tests {
-		result := Permutations(test.n)
+		result := Permutations(test.n, test.r)
 		if len(result) != test.expected {
-			t.Errorf("Permutations(%d) returned %d results, expected %d", test.n, len(result), test.expected)
+			t.Errorf("Permutations(%d, %d) returned %d results, expected %d", test.n, test.r, len(result), test.expected)
 		}
 	}
 }
 
-// TestPermutationsAllValid checks that all permutations contain valid elements
+// TestPermutationsInvalidInputs tests edge cases that should return empty
+func TestPermutationsInvalidInputs(t *testing.T) {
+	tests := []struct {
+		n, r int
+	}{
+		{3, -1},
+		{3, 4},
+		{0, 1},
+		{2, 5},
+	}
+
+	for _, test := range tests {
+		result := Permutations(test.n, test.r)
+		if len(result) != 0 {
+			t.Errorf("Permutations(%d, %d) returned %d results, expected 0", test.n, test.r, len(result))
+		}
+	}
+}
+
+// TestPermutationsAllValid checks elements are valid and unique within each permutation
 func TestPermutationsAllValid(t *testing.T) {
-	for n := 0; n <= 6; n++ {
-		result := Permutations(n)
+	for n := 0; n <= 5; n++ {
+		for r := 0; r <= n; r++ {
+			result := Permutations(n, r)
 
-		for i, perm := range result {
-			if len(perm) != n {
-				t.Errorf("n=%d: Permutation %d has wrong length: expected %d, got %d", n, i, n, len(perm))
-			}
-
-			// Check all elements are in range [0, n-1]
-			for j, val := range perm {
-				if val < 0 || val >= n {
-					t.Errorf("n=%d: Permutation %d has invalid element at position %d: %d", n, i, j, val)
+			for i, perm := range result {
+				if len(perm) != r {
+					t.Errorf("(%d,%d): Permutation %d has wrong length: expected %d, got %d", n, r, i, r, len(perm))
 				}
-			}
 
-			// Check for duplicates within a permutation
-			seen := make(map[int]bool)
-			for _, val := range perm {
-				if seen[val] {
-					t.Errorf("n=%d: Permutation %d has duplicate element: %d", n, i, val)
+				seen := make(map[int]bool)
+				for j, val := range perm {
+					if val < 0 || val >= n {
+						t.Errorf("(%d,%d): Permutation %d has invalid element at position %d: %d", n, r, i, j, val)
+					}
+					if seen[val] {
+						t.Errorf("(%d,%d): Permutation %d has duplicate element: %d", n, r, i, val)
+					}
+					seen[val] = true
 				}
-				seen[val] = true
 			}
 		}
 	}
 }
 
-// TestPermutationsUnique checks that all permutations are unique
+// TestPermutationsUnique checks that all permutations are distinct
 func TestPermutationsUnique(t *testing.T) {
 	for n := 0; n <= 5; n++ {
-		result := Permutations(n)
+		for r := 0; r <= n; r++ {
+			result := Permutations(n, r)
 
-		seen := make(map[string]bool)
-		for i, perm := range result {
-			key := ""
-			for _, val := range perm {
-				key += string(rune(val)) + ","
+			seen := make(map[string]bool)
+			for i, perm := range result {
+				key := fmt.Sprintf("%v", perm)
+				if seen[key] {
+					t.Errorf("(%d,%d): Duplicate permutation at index %d: %v", n, r, i, perm)
+				}
+				seen[key] = true
 			}
-
-			if seen[key] {
-				t.Errorf("n=%d: Duplicate permutation found at index %d: %v", n, i, perm)
-			}
-			seen[key] = true
 		}
 	}
 }
 
-// TestPermutationsAllElementPositions verifies each element appears in each position
-func TestPermutationsAllElementPositions(t *testing.T) {
+// TestPermutationsFullElementPositions verifies each element appears in each position equally for r=n
+func TestPermutationsFullElementPositions(t *testing.T) {
 	for n := 1; n <= 5; n++ {
-		result := Permutations(n)
+		result := Permutations(n, n)
 
-		// For each position, count how many times each element appears
+		expectedCount := 1
+		for i := 2; i < n; i++ {
+			expectedCount *= i
+		}
+
 		for pos := 0; pos < n; pos++ {
 			counts := make(map[int]int)
 			for _, perm := range result {
 				counts[perm[pos]]++
 			}
-
-			// Each element should appear in each position exactly (n-1)! times
-			expectedCount := 1
-			for i := 2; i < n; i++ {
-				expectedCount *= i
-			}
-
 			for elem := 0; elem < n; elem++ {
 				if counts[elem] != expectedCount {
 					t.Errorf("n=%d: Element %d appears %d times in position %d, expected %d",
@@ -176,13 +204,11 @@ func TestPermutationsAllElementPositions(t *testing.T) {
 
 // TestPermutationsIndependence checks that returned slices are independent
 func TestPermutationsIndependence(t *testing.T) {
-	result := Permutations(3)
+	result := Permutations(3, 3)
 
-	// Modify the first permutation
-	originalVal := result[0][0]
+	original := result[0][0]
 	result[0][0] = 999
 
-	// Check that other permutations are not affected
 	for i := 1; i < len(result); i++ {
 		for _, val := range result[i] {
 			if val == 999 {
@@ -191,10 +217,233 @@ func TestPermutationsIndependence(t *testing.T) {
 		}
 	}
 
-	// Restore and check the second permutation is not affected by first
-	result[0][0] = originalVal
-	if result[0][0] != originalVal {
-		t.Errorf("Failed to restore result[0][0]")
+	result[0][0] = original
+}
+
+// TestPermutationsPartialElementCoverage verifies all elements appear in partial permutations
+func TestPermutationsPartialElementCoverage(t *testing.T) {
+	result := Permutations(4, 2)
+
+	elemSeen := make(map[int]bool)
+	for _, perm := range result {
+		for _, val := range perm {
+			elemSeen[val] = true
+		}
+	}
+	for i := 0; i < 4; i++ {
+		if !elemSeen[i] {
+			t.Errorf("Element %d never appears in Permutations(4, 2)", i)
+		}
+	}
+}
+
+// TestCombinationsZeroZero tests Combinations(0, 0)
+func TestCombinationsZeroZero(t *testing.T) {
+	result := Combinations(0, 0)
+	if len(result) != 1 {
+		t.Errorf("Expected 1 combination for (0,0), got %d", len(result))
+	}
+	if len(result[0]) != 0 {
+		t.Errorf("Expected empty combination for (0,0), got %v", result[0])
+	}
+}
+
+// TestCombinationsSmallValues tests specific known combinations
+func TestCombinationsSmallValues(t *testing.T) {
+	result := Combinations(4, 2)
+	expected := [][]int{{0, 1}, {0, 2}, {0, 3}, {1, 2}, {1, 3}, {2, 3}}
+	if len(result) != len(expected) {
+		t.Errorf("Expected %d combinations for (4,2), got %d", len(expected), len(result))
+	}
+	for _, exp := range expected {
+		found := false
+		for _, comb := range result {
+			if slices.Equal(comb, exp) {
+				found = true
+				break
+			}
+		}
+		if !found {
+			t.Errorf("Expected combination %v not found in Combinations(4,2)", exp)
+		}
+	}
+}
+
+// TestCombinationsROne tests Combinations(n, 1)
+func TestCombinationsROne(t *testing.T) {
+	for n := 1; n <= 5; n++ {
+		result := Combinations(n, 1)
+		if len(result) != n {
+			t.Errorf("Combinations(%d, 1) returned %d results, expected %d", n, len(result), n)
+		}
+		for i, comb := range result {
+			if len(comb) != 1 || comb[0] != i {
+				t.Errorf("Combinations(%d, 1)[%d] = %v, expected [%d]", n, i, comb, i)
+			}
+		}
+	}
+}
+
+// TestCombinationsREqualsN tests Combinations(n, n)
+func TestCombinationsREqualsN(t *testing.T) {
+	for n := 0; n <= 5; n++ {
+		result := Combinations(n, n)
+		if len(result) != 1 {
+			t.Errorf("Combinations(%d, %d) returned %d results, expected 1", n, n, len(result))
+		}
+		if len(result[0]) != n {
+			t.Errorf("Combinations(%d, %d)[0] has length %d, expected %d", n, n, len(result[0]), n)
+		}
+		for i := 0; i < n; i++ {
+			if result[0][i] != i {
+				t.Errorf("Combinations(%d, %d)[0][%d] = %d, expected %d", n, n, i, result[0][i], i)
+			}
+		}
+	}
+}
+
+// TestCombinationsCount verifies C(n, r) = n! / (r! * (n-r)!)
+func TestCombinationsCount(t *testing.T) {
+	tests := []struct {
+		n, r     int
+		expected int
+	}{
+		{0, 0, 1},
+		{1, 0, 1},
+		{1, 1, 1},
+		{2, 0, 1},
+		{2, 1, 2},
+		{2, 2, 1},
+		{3, 0, 1},
+		{3, 1, 3},
+		{3, 2, 3},
+		{3, 3, 1},
+		{4, 2, 6},
+		{5, 2, 10},
+		{5, 3, 10},
+		{6, 3, 20},
+		{10, 3, 120},
+		{10, 5, 252},
+	}
+
+	for _, test := range tests {
+		result := Combinations(test.n, test.r)
+		if len(result) != test.expected {
+			t.Errorf("Combinations(%d, %d) returned %d results, expected %d", test.n, test.r, len(result), test.expected)
+		}
+	}
+}
+
+// TestCombinationsInvalidInputs tests edge cases that should return empty
+func TestCombinationsInvalidInputs(t *testing.T) {
+	tests := []struct {
+		n, r int
+	}{
+		{3, -1},
+		{3, 4},
+		{0, 1},
+		{2, 5},
+	}
+
+	for _, test := range tests {
+		result := Combinations(test.n, test.r)
+		if len(result) != 0 {
+			t.Errorf("Combinations(%d, %d) returned %d results, expected 0", test.n, test.r, len(result))
+		}
+	}
+}
+
+// TestCombinationsAllValid checks elements are valid, unique, and sorted within each combination
+func TestCombinationsAllValid(t *testing.T) {
+	for n := 0; n <= 6; n++ {
+		for r := 0; r <= n; r++ {
+			result := Combinations(n, r)
+
+			for i, comb := range result {
+				if len(comb) != r {
+					t.Errorf("(%d,%d): Combination %d has wrong length: expected %d, got %d", n, r, i, r, len(comb))
+				}
+
+				for j, val := range comb {
+					if val < 0 || val >= n {
+						t.Errorf("(%d,%d): Combination %d has invalid element at position %d: %d", n, r, i, j, val)
+					}
+					if j > 0 && comb[j-1] >= val {
+						t.Errorf("(%d,%d): Combination %d is not strictly increasing at position %d: %v", n, r, i, j, comb)
+					}
+				}
+			}
+		}
+	}
+}
+
+// TestCombinationsUnique checks that all combinations are distinct
+func TestCombinationsUnique(t *testing.T) {
+	for n := 0; n <= 6; n++ {
+		for r := 0; r <= n; r++ {
+			result := Combinations(n, r)
+
+			seen := make(map[string]bool)
+			for i, comb := range result {
+				key := fmt.Sprintf("%v", comb)
+				if seen[key] {
+					t.Errorf("(%d,%d): Duplicate combination at index %d: %v", n, r, i, comb)
+				}
+				seen[key] = true
+			}
+		}
+	}
+}
+
+// TestCombinationsElementCoverage verifies all elements appear in combinations
+func TestCombinationsElementCoverage(t *testing.T) {
+	for n := 1; n <= 6; n++ {
+		for r := 1; r <= n; r++ {
+			result := Combinations(n, r)
+
+			elemSeen := make(map[int]bool)
+			for _, comb := range result {
+				for _, val := range comb {
+					elemSeen[val] = true
+				}
+			}
+			for i := 0; i < n; i++ {
+				if !elemSeen[i] {
+					t.Errorf("Element %d never appears in Combinations(%d, %d)", i, n, r)
+				}
+			}
+		}
+	}
+}
+
+// TestCombinationsIndependence checks that returned slices are independent
+func TestCombinationsIndependence(t *testing.T) {
+	result := Combinations(4, 2)
+
+	original := result[0][0]
+	result[0][0] = 999
+
+	for i := 1; i < len(result); i++ {
+		for _, val := range result[i] {
+			if val == 999 {
+				t.Errorf("Modifying result[0] affected result[%d]", i)
+			}
+		}
+	}
+
+	result[0][0] = original
+}
+
+// TestCombinationsCountMatchesBinomial verifies len(Combinations(n,r)) == Binomial(n,r)
+func TestCombinationsCountMatchesBinomial(t *testing.T) {
+	for n := 0; n <= 10; n++ {
+		for r := 0; r <= n; r++ {
+			result := Combinations(n, r)
+			expected := Binomial(n, r)
+			if len(result) != expected {
+				t.Errorf("len(Combinations(%d, %d)) = %d, Binomial(%d, %d) = %d", n, r, len(result), n, r, expected)
+			}
+		}
 	}
 }
 

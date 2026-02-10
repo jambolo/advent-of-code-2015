@@ -149,3 +149,12 @@ Trivial.
 |------|--------|
 |    1 |     40 |
 |    2 |    241 |
+
+## Day 17
+
+Go is lame. I had Claude write a function that generates combinations for me. With that it was simple after fix some bugs.
+
+| Part | Answer |
+|------|--------|
+|    1 |   4372 |
+|    2 |      4 |

@@ -10,6 +10,7 @@ make clean          # Remove bin/
 ```
 
 Run a solution:
+
 ```bash
 ./bin/day01 -file data/day01/day01-input.txt -part 1
 ./bin/day01 -file data/day01/day01-input.txt -part 2

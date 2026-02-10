@@ -40,7 +40,7 @@ func main() {
 		cities = append(cities, city)
 	}
 
-	allRoutes := utils.Permutations(len(cities))
+	allRoutes := utils.Permutations(len(cities), len(cities))
 	minDistance := math.MaxInt
 	maxDistance := 0
 	for _, route := range allRoutes {

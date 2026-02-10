@@ -83,7 +83,7 @@ func main() {
 
 	// Generate all permutations of people
 	numberOfPeople := len(relationships)
-	permutations := utils.Permutations(numberOfPeople)
+	permutations := utils.Permutations(numberOfPeople, numberOfPeople)
 
 	// Score each permutation and find the maximum
 	maxHappiness := math.MinInt

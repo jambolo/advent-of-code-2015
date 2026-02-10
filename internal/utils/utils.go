@@ -45,35 +45,63 @@ func SliceMin[T interface {
 	return result
 }
 
-// Returns all permutations of the integers 0 to n-1.
-func Permutations(n int) [][]int {
-	if n == 0 {
-		return [][]int{{}}
+// Returns all permutations of the integers 0 to n-1, taken r at a time.
+func Permutations(n, r int) [][]int {
+	if r < 0 || r > n {
+		return [][]int{}
 	}
-	var result [][]int
-	perm := make([]int, n)
-	for i := range perm {
-		perm[i] = i
+
+	count := 1
+	for i := 0; i < r; i++ {
+		count *= (n - i)
 	}
-	var generate func(int)
-	generate = func(k int) {
-		if k == 1 {
-			tmp := make([]int, n)
-			copy(tmp, perm)
-			result = append(result, tmp)
-			return
-		}
-		for i := range k {
-			generate(k - 1)
-			if k%2 == 0 {
-				perm[i], perm[k-1] = perm[k-1], perm[i]
-			} else {
-				perm[0], perm[k-1] = perm[k-1], perm[0]
-			}
-		}
-	}
-	generate(n)
+
+	result := make([][]int, 0, count)
+	buffer := make([]int, r)
+	used := make([]bool, n)
+	permutationsRecursive(buffer, 0, n, r, used, &result)
 	return result
+}
+
+func permutationsRecursive(buffer []int, pos, n, r int, used []bool, result *[][]int) {
+	if pos == r {
+		*result = append(*result, append([]int(nil), buffer...))
+		return
+	}
+
+	for i := 0; i < n; i++ {
+		if !used[i] {
+			buffer[pos] = i
+			used[i] = true
+			permutationsRecursive(buffer, pos+1, n, r, used, result)
+			used[i] = false
+		}
+	}
+}
+
+// Combinations returns all combinations of the integers 0 to n-1, taken r at a time.
+func Combinations(n, r int) [][]int {
+	if r < 0 || r > n {
+		return [][]int{}
+	}
+
+	count := Binomial(n, r)
+	result := make([][]int, 0, count)
+	buffer := make([]int, r)
+	combinationsRecursive(buffer, 0, 0, n, r, &result)
+	return result
+}
+
+func combinationsRecursive(buffer []int, pos, start, n, r int, result *[][]int) {
+	if pos == r {
+		*result = append(*result, append([]int(nil), buffer...))
+		return
+	}
+
+	for i := start; i <= n-(r-pos); i++ {
+		buffer[pos] = i
+		combinationsRecursive(buffer, pos+1, i+1, n, r, result)
+	}
 }
 
 // Compositions generates all possible compositions of the integer m into exactly n positive parts.
