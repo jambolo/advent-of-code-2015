@@ -179,9 +179,18 @@ Part 1 was trivial, but part 2 probably needs A*.
 
 ## Day 20
 
-Trivial after switching to a sieve algorithm. I was hoping the naive method was fast enough but it wasn't.
+Trivial after switching to a sieve algorithm. I was hoping the naive method was fast enough, but it wasn't.
 
 | Part | Answer |
 |------|--------|
 |    1 | 665280 |
 |    2 | 705600 |
+
+## Day 21
+
+Trivial. Most of the puzzles are too simple to be interesting, but I am at least learning Go. I'm also surprised how difficult Day 19, part 2 is compared to all the rest. I wonder if I am making it more difficult than it needs to be.
+
+| Part | Answer |
+|------|--------|
+|    1 |     78 |
+|    2 |    148 |
