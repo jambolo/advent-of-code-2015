@@ -176,3 +176,12 @@ Part 1 was trivial, but part 2 probably needs A*.
 |------|--------|
 |    1 |    535 |
 |    2 |      ? |
+
+## Day 20
+
+Trivial after switching to a sieve algorithm. I was hoping the naive method was fast enough but it wasn't.
+
+| Part | Answer |
+|------|--------|
+|    1 | 665280 |
+|    2 | 705600 |
