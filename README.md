@@ -167,3 +167,12 @@ Game of Life. Trivial. The only tricky part was that the instructions are mislea
 |------|--------|
 |    1 |    821 |
 |    2 |    886 |
+
+## Day 19
+
+Part 1 was trivial, but part 2 probably needs A*.
+
+| Part | Answer |
+|------|--------|
+|    1 |    535 |
+|    2 |      ? |
