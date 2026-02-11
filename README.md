@@ -194,3 +194,12 @@ Trivial. Most of the puzzles are too simple to be interesting, but I am at least
 |------|--------|
 |    1 |     78 |
 |    2 |    148 |
+
+## Day 22
+
+Complicated. A recursive approach worked well, but there were lots of state that had to be maintained. Caching is always the answer when the solution involves combinations.
+
+| Part | Answer |
+|------|--------|
+|    1 |    900 |
+|    2 |   1216 |
