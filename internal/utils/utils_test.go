@@ -1161,3 +1161,150 @@ func TestGatherSingleElementSlice(t *testing.T) {
 		t.Errorf("Gather([0,0,0], [42]) = %v, expected %v", result, expected)
 	}
 }
+
+// TestInvertMapEmpty tests InvertMap with an empty map
+func TestInvertMapEmpty(t *testing.T) {
+	result := InvertMap(map[string][]string{})
+	if len(result) != 0 {
+		t.Errorf("InvertMap(empty) returned %d entries, expected 0", len(result))
+	}
+}
+
+// TestInvertMapSingleKeyValue tests InvertMap with one key mapping to one value
+func TestInvertMapSingleKeyValue(t *testing.T) {
+	result := InvertMap(map[string][]string{"a": {"x"}})
+	if len(result) != 1 {
+		t.Errorf("Expected 1 key, got %d", len(result))
+	}
+	if len(result["x"]) != 1 || result["x"][0] != "a" {
+		t.Errorf("Expected x->[a], got x->%v", result["x"])
+	}
+}
+
+// TestInvertMapOneKeyMultipleValues tests InvertMap with one key mapping to multiple values
+func TestInvertMapOneKeyMultipleValues(t *testing.T) {
+	result := InvertMap(map[string][]string{"a": {"x", "y", "z"}})
+	if len(result) != 3 {
+		t.Errorf("Expected 3 keys, got %d", len(result))
+	}
+	for _, v := range []string{"x", "y", "z"} {
+		if len(result[v]) != 1 || result[v][0] != "a" {
+			t.Errorf("Expected %s->[a], got %s->%v", v, v, result[v])
+		}
+	}
+}
+
+// TestInvertMapMultipleKeysSameValue tests InvertMap when multiple keys map to the same value
+func TestInvertMapMultipleKeysSameValue(t *testing.T) {
+	result := InvertMap(map[string][]string{"a": {"x"}, "b": {"x"}, "c": {"x"}})
+	if len(result) != 1 {
+		t.Errorf("Expected 1 key, got %d", len(result))
+	}
+	if len(result["x"]) != 3 {
+		t.Errorf("Expected 3 values for x, got %d", len(result["x"]))
+	}
+	seen := map[string]bool{}
+	for _, v := range result["x"] {
+		seen[v] = true
+	}
+	for _, k := range []string{"a", "b", "c"} {
+		if !seen[k] {
+			t.Errorf("Expected %s in result[x], got %v", k, result["x"])
+		}
+	}
+}
+
+// TestInvertMapDisjoint tests InvertMap with disjoint keys and values
+func TestInvertMapDisjoint(t *testing.T) {
+	input := map[string][]string{
+		"a": {"1", "2"},
+		"b": {"3", "4"},
+	}
+	result := InvertMap(input)
+	if len(result) != 4 {
+		t.Errorf("Expected 4 keys, got %d", len(result))
+	}
+	expected := map[string]string{"1": "a", "2": "a", "3": "b", "4": "b"}
+	for k, v := range expected {
+		if len(result[k]) != 1 || result[k][0] != v {
+			t.Errorf("Expected %s->[%s], got %s->%v", k, v, k, result[k])
+		}
+	}
+}
+
+// TestInvertMapOverlappingValues tests InvertMap with partially overlapping values
+func TestInvertMapOverlappingValues(t *testing.T) {
+	input := map[string][]string{
+		"a": {"x", "y"},
+		"b": {"y", "z"},
+	}
+	result := InvertMap(input)
+	if len(result) != 3 {
+		t.Errorf("Expected 3 keys, got %d", len(result))
+	}
+	if len(result["x"]) != 1 || result["x"][0] != "a" {
+		t.Errorf("Expected x->[a], got x->%v", result["x"])
+	}
+	if len(result["z"]) != 1 || result["z"][0] != "b" {
+		t.Errorf("Expected z->[b], got z->%v", result["z"])
+	}
+	if len(result["y"]) != 2 {
+		t.Errorf("Expected 2 values for y, got %d", len(result["y"]))
+	}
+	seen := map[string]bool{}
+	for _, v := range result["y"] {
+		seen[v] = true
+	}
+	if !seen["a"] || !seen["b"] {
+		t.Errorf("Expected y->[a,b], got y->%v", result["y"])
+	}
+}
+
+// TestInvertMapEmptyValueSlice tests InvertMap with an empty value slice
+func TestInvertMapEmptyValueSlice(t *testing.T) {
+	result := InvertMap(map[string][]string{"a": {}})
+	if len(result) != 0 {
+		t.Errorf("Expected 0 keys, got %d", len(result))
+	}
+}
+
+// TestInvertMapDoubleInvert tests that inverting twice recovers the original (for one-to-one mappings)
+func TestInvertMapDoubleInvert(t *testing.T) {
+	input := map[string][]string{
+		"a": {"1"},
+		"b": {"2"},
+		"c": {"3"},
+	}
+	result := InvertMap(InvertMap(input))
+	if len(result) != len(input) {
+		t.Errorf("Double invert changed key count: expected %d, got %d", len(input), len(result))
+	}
+	for k, vs := range input {
+		if len(result[k]) != len(vs) {
+			t.Errorf("Double invert changed value count for %s: expected %d, got %d", k, len(vs), len(result[k]))
+		}
+		if result[k][0] != vs[0] {
+			t.Errorf("Double invert changed value for %s: expected %s, got %s", k, vs[0], result[k][0])
+		}
+	}
+}
+
+// TestInvertMapDoesNotMutateInput tests that InvertMap does not modify the input map
+func TestInvertMapDoesNotMutateInput(t *testing.T) {
+	input := map[string][]string{
+		"a": {"x", "y"},
+		"b": {"z"},
+	}
+	// Save copies
+	origA := append([]string(nil), input["a"]...)
+	origB := append([]string(nil), input["b"]...)
+
+	InvertMap(input)
+
+	if !slices.Equal(input["a"], origA) {
+		t.Errorf("Input[a] was mutated: expected %v, got %v", origA, input["a"])
+	}
+	if !slices.Equal(input["b"], origB) {
+		t.Errorf("Input[b] was mutated: expected %v, got %v", origB, input["b"])
+	}
+}

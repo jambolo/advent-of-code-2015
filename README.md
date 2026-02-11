@@ -170,12 +170,12 @@ Game of Life. Trivial. The only tricky part was that the instructions are mislea
 
 ## Day 19
 
-Part 1 was trivial, but part 2 probably needs A*.
+Part 1 was trivial, but part 2 probably needs A*. Part 2 does need A*, but the trick is to reverse the path to simplify the heuristic function. The current heuristic function is not admissible, but it still worked somehow.
 
 | Part | Answer |
 |------|--------|
 |    1 |    535 |
-|    2 |      ? |
+|    2 |    212 |
 
 ## Day 20
 

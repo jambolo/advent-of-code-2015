@@ -167,3 +167,14 @@ func Gather(x []int, slice []int) []int {
 	}
 	return y
 }
+
+// InvertMap returns a new map with keys and values swapped.
+func InvertMap(m map[string][]string) map[string][]string {
+	result := make(map[string][]string)
+	for k, vs := range m {
+		for _, v := range vs {
+			result[v] = append(result[v], k)
+		}
+	}
+	return result
+}
