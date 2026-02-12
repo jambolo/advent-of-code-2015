@@ -203,3 +203,12 @@ Complicated. A recursive approach worked well, but there were lots of state that
 |------|--------|
 |    1 |    900 |
 |    2 |   1216 |
+
+## Day 23
+
+Trivial again. Because most of these puzzles have been trivial, I don't mind letting Copilot do all the typing for me.
+
+| Part | Answer |
+|------|--------|
+|    1 |    170 |
+|    2 |    247 |
