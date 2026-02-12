@@ -13,6 +13,19 @@ func SliceSum[T interface {
 	return result
 }
 
+// SliceProduct returns the product of all elements in a slice of numeric types.
+func SliceProduct[T interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64 |
+		~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uintptr |
+		~float32 | ~float64
+}](slice []T) T {
+	var result T = 1
+	for _, v := range slice {
+		result *= v
+	}
+	return result
+}
+
 // SliceMax returns the maximum of all elements in a slice of numeric types
 func SliceMax[T interface {
 	~int | ~int8 | ~int16 | ~int32 | ~int64 |
@@ -144,4 +157,13 @@ func Binomial(n, k int) int {
 		result = result * (n - i) / (i + 1)
 	}
 	return result
+}
+
+// Gather returns a slice of the elements of a slice at the indices specified in x.
+func Gather(x []int, slice []int) []int {
+	y := make([]int, len(x))
+	for i, v := range x {
+		y[i] = slice[v]
+	}
+	return y
 }

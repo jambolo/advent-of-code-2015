@@ -212,3 +212,12 @@ Trivial again. Because most of these puzzles have been trivial, I don't mind let
 |------|--------|
 |    1 |    170 |
 |    2 |    247 |
+
+## Day 24
+
+Ok, I took the easy way out on this one. I assumed that something about the puzzle or the math would guarantee that if I find one group of the correct weight, then the other groups could be made with the correct weight. It turns out that my assumption worked and that made the solution much easier to implement. Finding all the possible groups was fast and easy, albeit recursive. Another hack was ignoring overflow in the products of the larger groups.
+
+| Part |    Answer   |
+|------|-------------|
+|    1 | 11266889531 |
+|    2 |    77387711 |

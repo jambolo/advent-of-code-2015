@@ -9,14 +9,6 @@ import (
 	"github.com/jambolo/advent-of-code-2015/internal/utils"
 )
 
-func gather(x []int, containers []int) []int {
-	y := make([]int, len(x))
-	for i, v := range x {
-		y[i] = containers[v]
-	}
-	return y
-}
-
 func main() {
 	day := 17
 
@@ -38,7 +30,7 @@ func main() {
 		for i := 1; i <= len(containers); i++ {
 			combinations := utils.Combinations(len(containers), i)
 			for _, p := range combinations {
-				if utils.SliceSum(gather(p, containers)) == 150 {
+				if utils.SliceSum(utils.Gather(p, containers)) == 150 {
 					count++
 				}
 			}
@@ -51,7 +43,7 @@ func main() {
 			count := 0
 			combinations := utils.Combinations(len(containers), i)
 			for _, p := range combinations {
-				if utils.SliceSum(gather(p, containers)) == 150 {
+				if utils.SliceSum(utils.Gather(p, containers)) == 150 {
 					count++
 				}
 			}

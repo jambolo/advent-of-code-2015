@@ -531,6 +531,101 @@ func TestSliceSumUint(t *testing.T) {
 	}
 }
 
+// TestSliceProductInt tests SliceProduct with int slices
+func TestSliceProductInt(t *testing.T) {
+	tests := []struct {
+		input    []int
+		expected int
+	}{
+		{[]int{}, 1},
+		{[]int{1}, 1},
+		{[]int{5}, 5},
+		{[]int{1, 2, 3}, 6},
+		{[]int{2, 3, 4}, 24},
+		{[]int{-1, 2, -3}, 6},
+		{[]int{-1, -2, -3}, -6},
+		{[]int{0, 1, 2}, 0},
+		{[]int{1, 0, 2}, 0},
+		{[]int{1, 2, 0}, 0},
+		{[]int{0, 0, 0}, 0},
+		{[]int{1, 1, 1}, 1},
+		{[]int{-1}, -1},
+		{[]int{-1, -1}, 1},
+		{[]int{10, 20, 30}, 6000},
+	}
+
+	for _, test := range tests {
+		result := SliceProduct(test.input)
+		if result != test.expected {
+			t.Errorf("SliceProduct(%v) = %d, expected %d", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSliceProductInt64 tests SliceProduct with int64 slices
+func TestSliceProductInt64(t *testing.T) {
+	tests := []struct {
+		input    []int64
+		expected int64
+	}{
+		{[]int64{}, 1},
+		{[]int64{1}, 1},
+		{[]int64{1, 2, 3}, 6},
+		{[]int64{1000000, 1000000}, 1000000000000},
+		{[]int64{-1, 9223372036854775807}, -9223372036854775807},
+	}
+
+	for _, test := range tests {
+		result := SliceProduct(test.input)
+		if result != test.expected {
+			t.Errorf("SliceProduct(%v) = %d, expected %d", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSliceProductFloat64 tests SliceProduct with float64 slices
+func TestSliceProductFloat64(t *testing.T) {
+	tests := []struct {
+		input    []float64
+		expected float64
+	}{
+		{[]float64{}, 1.0},
+		{[]float64{2.5}, 2.5},
+		{[]float64{2.0, 3.0, 4.0}, 24.0},
+		{[]float64{0.5, 0.5}, 0.25},
+		{[]float64{-1.5, 2.0}, -3.0},
+		{[]float64{0.1, 10.0}, 1.0},
+	}
+
+	for _, test := range tests {
+		result := SliceProduct(test.input)
+		if math.Abs(result-test.expected) > 1e-10 {
+			t.Errorf("SliceProduct(%v) = %f, expected %f", test.input, result, test.expected)
+		}
+	}
+}
+
+// TestSliceProductUint tests SliceProduct with uint slices
+func TestSliceProductUint(t *testing.T) {
+	tests := []struct {
+		input    []uint
+		expected uint
+	}{
+		{[]uint{}, 1},
+		{[]uint{1}, 1},
+		{[]uint{1, 2, 3}, 6},
+		{[]uint{5, 5, 5}, 125},
+		{[]uint{0, 100}, 0},
+	}
+
+	for _, test := range tests {
+		result := SliceProduct(test.input)
+		if result != test.expected {
+			t.Errorf("SliceProduct(%v) = %d, expected %d", test.input, result, test.expected)
+		}
+	}
+}
+
 // TestSliceMaxInt tests SliceMax with int slices
 func TestSliceMaxInt(t *testing.T) {
 	tests := []struct {
@@ -916,5 +1011,153 @@ func TestBinomialRowSum(t *testing.T) {
 		if sum != expected {
 			t.Errorf("Sum of Binomial(%d, 0..%d) = %d, expected %d", n, n, sum, expected)
 		}
+	}
+}
+
+// TestGatherBasic tests Gather with typical inputs
+func TestGatherBasic(t *testing.T) {
+	tests := []struct {
+		name     string
+		indices  []int
+		slice    []int
+		expected []int
+	}{
+		{"single index", []int{2}, []int{10, 20, 30, 40}, []int{30}},
+		{"multiple indices", []int{0, 2, 3}, []int{10, 20, 30, 40}, []int{10, 30, 40}},
+		{"all indices", []int{0, 1, 2, 3}, []int{10, 20, 30, 40}, []int{10, 20, 30, 40}},
+		{"reversed order", []int{3, 2, 1, 0}, []int{10, 20, 30, 40}, []int{40, 30, 20, 10}},
+		{"first element only", []int{0}, []int{10, 20, 30}, []int{10}},
+		{"last element only", []int{2}, []int{10, 20, 30}, []int{30}},
+	}
+
+	for _, test := range tests {
+		result := Gather(test.indices, test.slice)
+		if !slices.Equal(result, test.expected) {
+			t.Errorf("Gather(%v, %v) = %v, expected %v", test.indices, test.slice, result, test.expected)
+		}
+	}
+}
+
+// TestGatherEmpty tests Gather with empty index slice
+func TestGatherEmpty(t *testing.T) {
+	result := Gather([]int{}, []int{10, 20, 30})
+	if len(result) != 0 {
+		t.Errorf("Gather([], ...) = %v, expected empty slice", result)
+	}
+}
+
+// TestGatherDuplicateIndices tests Gather with repeated indices
+func TestGatherDuplicateIndices(t *testing.T) {
+	result := Gather([]int{1, 1, 1}, []int{10, 20, 30})
+	expected := []int{20, 20, 20}
+	if !slices.Equal(result, expected) {
+		t.Errorf("Gather([1,1,1], [10,20,30]) = %v, expected %v", result, expected)
+	}
+}
+
+// TestGatherPreservesOrder tests that output order matches index order
+func TestGatherPreservesOrder(t *testing.T) {
+	slice := []int{100, 200, 300, 400, 500}
+	indices := []int{4, 0, 3, 1, 2}
+	expected := []int{500, 100, 400, 200, 300}
+	result := Gather(indices, slice)
+	if !slices.Equal(result, expected) {
+		t.Errorf("Gather(%v, %v) = %v, expected %v", indices, slice, result, expected)
+	}
+}
+
+// TestGatherIndependence tests that the result is independent from the source
+func TestGatherIndependence(t *testing.T) {
+	slice := []int{10, 20, 30}
+	result := Gather([]int{0, 1, 2}, slice)
+
+	// Modifying result should not affect source
+	result[0] = 999
+	if slice[0] != 10 {
+		t.Errorf("Modifying Gather result affected source slice")
+	}
+
+	// Modifying source should not affect result
+	slice[1] = 888
+	if result[1] != 20 {
+		t.Errorf("Modifying source slice affected Gather result")
+	}
+}
+
+// TestGatherResultLength tests that output length equals index length
+func TestGatherResultLength(t *testing.T) {
+	slice := []int{10, 20, 30, 40, 50}
+	for n := 0; n <= 5; n++ {
+		indices := make([]int, n)
+		for i := range indices {
+			indices[i] = i
+		}
+		result := Gather(indices, slice)
+		if len(result) != n {
+			t.Errorf("Gather with %d indices returned %d elements", n, len(result))
+		}
+	}
+}
+
+// TestGatherWithPermutations tests Gather used with Permutations output
+func TestGatherWithPermutations(t *testing.T) {
+	values := []int{10, 20, 30}
+	perms := Permutations(3, 3)
+
+	seen := make(map[string]bool)
+	for _, perm := range perms {
+		gathered := Gather(perm, values)
+		key := fmt.Sprintf("%v", gathered)
+		if seen[key] {
+			t.Errorf("Duplicate gathered permutation: %v", gathered)
+		}
+		seen[key] = true
+
+		// Verify gathered values are valid
+		sum := SliceSum(gathered)
+		if sum != 60 {
+			t.Errorf("Gathered permutation %v sums to %d, expected 60", gathered, sum)
+		}
+	}
+
+	if len(seen) != 6 {
+		t.Errorf("Expected 6 unique gathered permutations, got %d", len(seen))
+	}
+}
+
+// TestGatherWithCombinations tests Gather used with Combinations output
+func TestGatherWithCombinations(t *testing.T) {
+	values := []int{10, 20, 30, 40}
+	combs := Combinations(4, 2)
+
+	for _, comb := range combs {
+		gathered := Gather(comb, values)
+		if len(gathered) != 2 {
+			t.Errorf("Gathered combination has wrong length: %d", len(gathered))
+		}
+		// Each gathered value should be from the values slice
+		for _, v := range gathered {
+			if v != 10 && v != 20 && v != 30 && v != 40 {
+				t.Errorf("Gathered value %d not in source slice", v)
+			}
+		}
+	}
+}
+
+// TestGatherNegativeValues tests Gather with negative values in the source slice
+func TestGatherNegativeValues(t *testing.T) {
+	result := Gather([]int{0, 2}, []int{-10, -20, -30})
+	expected := []int{-10, -30}
+	if !slices.Equal(result, expected) {
+		t.Errorf("Gather([0,2], [-10,-20,-30]) = %v, expected %v", result, expected)
+	}
+}
+
+// TestGatherSingleElementSlice tests Gather from a single-element source
+func TestGatherSingleElementSlice(t *testing.T) {
+	result := Gather([]int{0, 0, 0}, []int{42})
+	expected := []int{42, 42, 42}
+	if !slices.Equal(result, expected) {
+		t.Errorf("Gather([0,0,0], [42]) = %v, expected %v", result, expected)
 	}
 }
