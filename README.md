@@ -221,3 +221,15 @@ Ok, I took the easy way out on this one. I assumed that something about the puzz
 |------|-------------|
 |    1 | 11266889531 |
 |    2 |    77387711 |
+
+## Day 25
+
+Knowing about triangle numbers made this trivial.
+
+| Part |  Answer |
+|------|---------|
+|    1 | 8997277 |
+
+## Summary
+
+The goal for me was to learn and become familiar with the language Go. After spending some time implementing the solutions to these puzzles in Go, I don't feel there is much of a reason to use Go in the future.
