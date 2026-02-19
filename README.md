@@ -232,4 +232,24 @@ Knowing about triangle numbers made this trivial.
 
 ## Summary
 
-The goal for me was to learn and become familiar with the language Go. After spending some time implementing the solutions to these puzzles in Go, I don't feel there is much of a reason to use Go in the future.
+### Go Language
+
+This is my first experience with Go. After spending some time implementing the solutions to these puzzles in Go, my overall impression is that the language is "anemic". It lacks the power, features, and expressiveness of other modern languages. Ironically, that is by design. I have read that the goal is to allow a diverse group of developers to quickly come up to speed on a common language. However, the flaw in that strategy is that once developers are proficient in the language, they become limited by the language. Furthermore, it has become much easier to be productive in an unfamiliar development environment with the advent of AI coding agents, making the goal of simplicity moot.
+
+I don't see much of a reason to use Go in the future.
+
+### Algorithms
+
+This is a list of the algorithms and techniques used to solve this year's puzzles.
+
+|       Algorithm / Technique        | Days   |
+|------------------------------------|--------|
+| A* search                          | 19     |
+| Cellular automaton (Game of Life)  | 18     |
+| Combinations                       | 17     |
+| Compositions (stars and bars)      | 15     |
+| Look-and-say / run-length encoding | 10     |
+| Memoization                        | 07, 22 |
+| Permutations                       | 09, 13 |
+| Sieve (divisor sum)                | 20     |
+| Triangular number indexing         | 25     |
